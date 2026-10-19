@@ -1,0 +1,199 @@
+name: Publish audited ReefAhead source once
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: reefahead-publish-audited-source
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'chibuzi111/ReefAhead' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Verify and extract the audited source
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path, PurePosixPath
+          import hashlib, json, os, stat, subprocess, zipfile
+          
+          archive = Path("ReefAhead_Public_Source.zip")
+          expected_sha256 = "c634f5d22c0f80b8e8cdc2db499bfd76f59b9e46b2d63d897d30a4999c49fe40"
+          expected_names = set(json.loads(r'''[
+            ".dockerignore",
+            ".gitignore",
+            "Dockerfile",
+            "LICENSE",
+            "README.md",
+            "THIRD_PARTY_NOTICES.md",
+            "app.py",
+            "artifacts/all_predictions.csv",
+            "artifacts/data_catalog.json",
+            "artifacts/diagnostics_v2/pixel_upcrossings.csv",
+            "artifacts/diagnostics_v2/regional_episode_proxies.csv",
+            "artifacts/diagnostics_v2/row_diagnostics.csv",
+            "artifacts/diagnostics_v2/stratified_metrics.csv",
+            "artifacts/evaluation.json",
+            "artifacts/evaluation_v2.json",
+            "artifacts/feature_importances.csv",
+            "artifacts/figures/baseline_comparison.png",
+            "artifacts/figures/observed_vs_predicted.png",
+            "artifacts/figures/test_timeseries.png",
+            "artifacts/independent_data_audit.json",
+            "artifacts/independent_result_audit.json",
+            "artifacts/latest_forecast.json",
+            "artifacts/model_14d.joblib",
+            "artifacts/model_7d.joblib",
+            "artifacts/replay_2026_predictions.csv",
+            "artifacts/site_metrics.csv",
+            "artifacts/test_predictions.csv",
+            "artifacts/test_results.xml",
+            "artifacts/threshold_crossing_events.csv",
+            "artifacts/validation_predictions.csv",
+            "artifacts/year_metrics.csv",
+            "data/atlas_20261018/context.json",
+            "data/atlas_20261018/display_habitat.geojson",
+            "data/atlas_20261018/manifest.json",
+            "data/atlas_20261018/pixels.geojson",
+            "data/atlas_20261018/portable_audit.json",
+            "data/atlas_20261018/raw_audit.json",
+            "data/manifest.json",
+            "data/processed/daily.csv",
+            "data/processed/data_quality.json",
+            "data/processed/source_reconstruction_check.json",
+            "docs/PUBLIC_RELEASE.md",
+            "docs/architecture.md",
+            "docs/data_ai_statement.md",
+            "docs/evaluation.md",
+            "docs/evaluation_analysis.md",
+            "docs/evaluation_v2.md",
+            "docs/independent_review.md",
+            "docs/model_card.md",
+            "docs/official_dataset_review_20261018.md",
+            "docs/sources.md",
+            "docs/sustainability.md",
+            "docs/upgrade_20261018.md",
+            "docs/upgrade_summary.md",
+            "docs/validation_plan.md",
+            "evidence/diagnostics_v2_protocol.json",
+            "evidence/diagnostics_v2_validation.json",
+            "evidence/floor_precision_assumptions.json",
+            "evidence/model_audit.json",
+            "evidence/model_figure_visual_qa.json",
+            "evidence/pre_evaluation_archive/features.py.before_retained_floor.txt",
+            "evidence/pre_evaluation_archive/predict.py.before_retained_floor.txt",
+            "evidence/pre_evaluation_archive/reporting.py.before_retained_floor.txt",
+            "evidence/pre_evaluation_archive/test_science.py.before_retained_floor.txt",
+            "evidence/pre_evaluation_archive/train.py.before_retained_floor.txt",
+            "evidence/pre_evaluation_archive/training_protocol.before_retained_floor.json",
+            "evidence/public_pytest.xml",
+            "evidence/public_release_manifest.json",
+            "evidence/public_release_validation.json",
+            "evidence/training_protocol.json",
+            "evidence/training_run.json",
+            "requirements.lock.txt",
+            "requirements.txt",
+            "scripts/audit_model_outputs.py",
+            "scripts/browser_qa.py",
+            "scripts/check_data.py",
+            "scripts/evaluate_v2.py",
+            "scripts/fetch_atlas_context.py",
+            "scripts/fetch_data.py",
+            "scripts/import_field_observations.py",
+            "scripts/independent_data_audit.py",
+            "scripts/independent_result_audit.py",
+            "scripts/serve.sh",
+            "scripts/verify_atlas_context.py",
+            "scripts/verify_noaa_producer.py",
+            "scripts/write_evaluation_analysis.py",
+            "src/__init__.py",
+            "src/catalog.py",
+            "src/diagnostics.py",
+            "src/features.py",
+            "src/observations.py",
+            "src/predict.py",
+            "src/reporting.py",
+            "src/spatial.py",
+            "src/train.py",
+            "tests/test_api.py",
+            "tests/test_diagnostics.py",
+            "tests/test_fetch_data_integrity.py",
+            "tests/test_model_integrity.py",
+            "tests/test_observations.py",
+            "tests/test_science.py",
+            "tests/test_spatial_context.py",
+            "tests/test_upgrade_api.py",
+            "tests/test_v2_episode_proxy.py",
+            "web/assets/NotoSansSC-Regular.ttf",
+            "web/assets/OFL.txt",
+            "web/assets/app.js",
+            "web/assets/i18n.js",
+            "web/assets/style.css",
+            "web/index.html"
+          ]'''))
+          if hashlib.sha256(archive.read_bytes()).hexdigest() != expected_sha256:
+              raise SystemExit("Archive checksum mismatch; nothing extracted.")
+          root = Path.cwd().resolve()
+          with zipfile.ZipFile(archive) as bundle:
+              entries = bundle.infolist()
+              names = [entry.filename for entry in entries]
+              if len(entries) != 110 or len(set(names)) != 110 or set(names) != expected_names:
+                  raise SystemExit("Archive does not match the 110 audited file paths.")
+              if sum(entry.file_size for entry in entries) > 50_000_000:
+                  raise SystemExit("Archive exceeds the audited release size limit.")
+              payload = []
+              for entry in entries:
+                  name = entry.filename
+                  rel = PurePosixPath(name)
+                  mode = entry.external_attr >> 16
+                  if (not name or "\\" in name or "\x00" in name or rel.is_absolute()
+                          or any(part in {"..", ".git", ".github"} for part in rel.parts)
+                          or entry.is_dir() or stat.S_IFMT(mode) not in {0, stat.S_IFREG}):
+                      raise SystemExit("Unsafe archive member refused.")
+                  target = root.joinpath(*rel.parts)
+                  # Refuse any pre-existing symlink in the extraction route.
+                  cursor = target
+                  while cursor != root:
+                      if cursor.is_symlink():
+                          raise SystemExit("Symlink in destination path refused.")
+                      cursor = cursor.parent
+                  if not target.resolve().is_relative_to(root):
+                      raise SystemExit("Archive destination escapes repository.")
+                  payload.append((name, target, bundle.read(entry)))
+          
+          # All archive metadata and CRCs have been checked before the first write.
+          for name, target, content in payload:
+              target.parent.mkdir(parents=True, exist_ok=True)
+              target.write_bytes(content)
+              target.chmod(0o755 if name == "scripts/serve.sh" else 0o644)
+          
+          # Compare each extracted file against its audited release hash.
+          release = json.loads(Path("evidence/public_release_manifest.json").read_text())
+          for name, expected in release["public_files_sha256"].items():
+              if name not in expected_names:
+                  raise SystemExit("Unexpected path in release manifest.")
+              if hashlib.sha256(Path(name).read_bytes()).hexdigest() != expected:
+                  raise SystemExit("Extracted file checksum mismatch.")
+          
+          # Stage only the 110 reviewed project paths. Do not touch .github or .git.
+          subprocess.run(["git", "add", "--", *sorted(expected_names)], check=True)
+          print("110 audited project files extracted, verified and staged.")
+          PY
+      - name: Commit the 110 audited project files
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "Publish audited runnable ReefAhead source"
+          git push origin HEAD:main
