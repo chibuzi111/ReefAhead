@@ -1,0 +1,249 @@
+{
+  "checked_at_utc": "2026-10-16T04:19:23.582948+00:00",
+  "source_sha256_verified": 241,
+  "raw_requests_complete": true,
+  "rows": 34744,
+  "processed_sha256": "b795ba20b11420ed42d29c8525af1ce63c2c4cd606d3a80074030998b42c1062",
+  "source_value_rows_verified": 34744,
+  "annual_sources_verified": 24,
+  "synthetic_observations": 0,
+  "interpolation_applied": false,
+  "sites": {
+    "semporna_offshore_1": {
+      "rows": 8686,
+      "date_min": "2003-01-01",
+      "date_max": "2026-10-12",
+      "missing_calendar_dates": [],
+      "duplicates": 0,
+      "inferred_mmm_min": 29.209999999999997,
+      "inferred_mmm_max": 29.21,
+      "dhw_84day_reconstruction": {
+        "valid_windows": 8603,
+        "mean_abs_difference": 0.0010602613706182356,
+        "max_abs_difference": 0.004285714285715336,
+        "note": "Uses rounded public HS; small differences from rounded official DHW are expected."
+      }
+    },
+    "semporna_offshore_2": {
+      "rows": 8686,
+      "date_min": "2003-01-01",
+      "date_max": "2026-10-12",
+      "missing_calendar_dates": [],
+      "duplicates": 0,
+      "inferred_mmm_min": 29.209999999999997,
+      "inferred_mmm_max": 29.21,
+      "dhw_84day_reconstruction": {
+        "valid_windows": 8603,
+        "mean_abs_difference": 0.0009051659720031274,
+        "max_abs_difference": 0.004285714285714892,
+        "note": "Uses rounded public HS; small differences from rounded official DHW are expected."
+      }
+    },
+    "semporna_offshore_3": {
+      "rows": 8686,
+      "date_min": "2003-01-01",
+      "date_max": "2026-10-12",
+      "missing_calendar_dates": [],
+      "duplicates": 0,
+      "inferred_mmm_min": 29.23,
+      "inferred_mmm_max": 29.230000000000004,
+      "dhw_84day_reconstruction": {
+        "valid_windows": 8603,
+        "mean_abs_difference": 0.0006906228724199233,
+        "max_abs_difference": 0.004285714285714892,
+        "note": "Uses rounded public HS; small differences from rounded official DHW are expected."
+      }
+    },
+    "semporna_south_central": {
+      "rows": 8686,
+      "date_min": "2003-01-01",
+      "date_max": "2026-10-12",
+      "missing_calendar_dates": [],
+      "duplicates": 0,
+      "inferred_mmm_min": 29.22,
+      "inferred_mmm_max": 29.220000000000002,
+      "dhw_84day_reconstruction": {
+        "valid_windows": 8603,
+        "mean_abs_difference": 0.0011648760399196238,
+        "max_abs_difference": 0.004285714285715336,
+        "note": "Uses rounded public HS; small differences from rounded official DHW are expected."
+      }
+    }
+  },
+  "calendar_complete": true,
+  "gap_fill_summary": {
+    "requests": 13,
+    "genuine_values_filled": 168,
+    "overlap_values_compared": 136,
+    "maximum_overlap_difference": 2.220446049250313e-16,
+    "out_of_window_rows_excluded": 64
+  },
+  "semantic_source_reconciliation": [
+    {
+      "changed_values": 118,
+      "date_start": "2019-04-02",
+      "date_end": "2019-04-16",
+      "variables": [
+        "CRW_HOTSPOT",
+        "CRW_SSTANOMALY"
+      ],
+      "previous_annual_sha256": "f74d3204186cf9f89e0a132c27c072c59b61fe84618b6bab1325a600d58fe3a0"
+    }
+  ],
+  "sst_hotspot_mmm_consistency_passed": true,
+  "producer_sample_verification": {
+    "verified_at_utc": "2026-10-16T04:19:26.106248+00:00",
+    "scope": "2019-04-02, four fixed satellite pixels, three original producer NetCDF products; representative-day check only",
+    "source_of_choice": "PacIOOS matches NOAA STAR producer; PIFSC HS/SSTA conflict is retained in the audit trail",
+    "records": [
+      {
+        "date": "2019-04-02",
+        "latitude": 4.275,
+        "longitude": 118.625,
+        "product": "hs",
+        "variable": "hotspot",
+        "producer_value": -0.1,
+        "pacioos_value": -0.1,
+        "scale_factor": 0.01,
+        "source_sha256": "ccc225c34e936e34ca5ce897ae8acad47385c859e5fc6e34466b14cc16f551f7",
+        "source_url": "https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0/daily/hs/2019/ct5km_hs_v3.1_20190402.nc"
+      },
+      {
+        "date": "2019-04-02",
+        "latitude": 4.275,
+        "longitude": 118.725,
+        "product": "hs",
+        "variable": "hotspot",
+        "producer_value": -0.11,
+        "pacioos_value": -0.11,
+        "scale_factor": 0.01,
+        "source_sha256": "ccc225c34e936e34ca5ce897ae8acad47385c859e5fc6e34466b14cc16f551f7",
+        "source_url": "https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0/daily/hs/2019/ct5km_hs_v3.1_20190402.nc"
+      },
+      {
+        "date": "2019-04-02",
+        "latitude": 4.275,
+        "longitude": 118.825,
+        "product": "hs",
+        "variable": "hotspot",
+        "producer_value": -0.2,
+        "pacioos_value": -0.2,
+        "scale_factor": 0.01,
+        "source_sha256": "ccc225c34e936e34ca5ce897ae8acad47385c859e5fc6e34466b14cc16f551f7",
+        "source_url": "https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0/daily/hs/2019/ct5km_hs_v3.1_20190402.nc"
+      },
+      {
+        "date": "2019-04-02",
+        "latitude": 4.275,
+        "longitude": 118.925,
+        "product": "hs",
+        "variable": "hotspot",
+        "producer_value": -0.43,
+        "pacioos_value": -0.43,
+        "scale_factor": 0.01,
+        "source_sha256": "ccc225c34e936e34ca5ce897ae8acad47385c859e5fc6e34466b14cc16f551f7",
+        "source_url": "https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0/daily/hs/2019/ct5km_hs_v3.1_20190402.nc"
+      },
+      {
+        "date": "2019-04-02",
+        "latitude": 4.275,
+        "longitude": 118.625,
+        "product": "ssta",
+        "variable": "sea_surface_temperature_anomaly",
+        "producer_value": 0.51,
+        "pacioos_value": 0.51,
+        "scale_factor": 0.01,
+        "source_sha256": "80ae346c26f2b4d691a297d1b1dae9daaf1577e01e6789695e43e9cb514912cc",
+        "source_url": "https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0/daily/ssta/2019/ct5km_ssta_v3.1_20190402.nc"
+      },
+      {
+        "date": "2019-04-02",
+        "latitude": 4.275,
+        "longitude": 118.725,
+        "product": "ssta",
+        "variable": "sea_surface_temperature_anomaly",
+        "producer_value": 0.53,
+        "pacioos_value": 0.53,
+        "scale_factor": 0.01,
+        "source_sha256": "80ae346c26f2b4d691a297d1b1dae9daaf1577e01e6789695e43e9cb514912cc",
+        "source_url": "https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0/daily/ssta/2019/ct5km_ssta_v3.1_20190402.nc"
+      },
+      {
+        "date": "2019-04-02",
+        "latitude": 4.275,
+        "longitude": 118.825,
+        "product": "ssta",
+        "variable": "sea_surface_temperature_anomaly",
+        "producer_value": 0.45,
+        "pacioos_value": 0.45,
+        "scale_factor": 0.01,
+        "source_sha256": "80ae346c26f2b4d691a297d1b1dae9daaf1577e01e6789695e43e9cb514912cc",
+        "source_url": "https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0/daily/ssta/2019/ct5km_ssta_v3.1_20190402.nc"
+      },
+      {
+        "date": "2019-04-02",
+        "latitude": 4.275,
+        "longitude": 118.925,
+        "product": "ssta",
+        "variable": "sea_surface_temperature_anomaly",
+        "producer_value": 0.23,
+        "pacioos_value": 0.23,
+        "scale_factor": 0.01,
+        "source_sha256": "80ae346c26f2b4d691a297d1b1dae9daaf1577e01e6789695e43e9cb514912cc",
+        "source_url": "https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0/daily/ssta/2019/ct5km_ssta_v3.1_20190402.nc"
+      },
+      {
+        "date": "2019-04-02",
+        "latitude": 4.275,
+        "longitude": 118.625,
+        "product": "dhw",
+        "variable": "degree_heating_week",
+        "producer_value": 0.0,
+        "pacioos_value": 0.0,
+        "scale_factor": 0.01,
+        "source_sha256": "09e29957179695006ed7b17e8ed2e3241b3a774afbe5621834d6679e5f15b700",
+        "source_url": "https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0/daily/dhw/2019/ct5km_dhw_v3.1_20190402.nc"
+      },
+      {
+        "date": "2019-04-02",
+        "latitude": 4.275,
+        "longitude": 118.725,
+        "product": "dhw",
+        "variable": "degree_heating_week",
+        "producer_value": 0.0,
+        "pacioos_value": 0.0,
+        "scale_factor": 0.01,
+        "source_sha256": "09e29957179695006ed7b17e8ed2e3241b3a774afbe5621834d6679e5f15b700",
+        "source_url": "https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0/daily/dhw/2019/ct5km_dhw_v3.1_20190402.nc"
+      },
+      {
+        "date": "2019-04-02",
+        "latitude": 4.275,
+        "longitude": 118.825,
+        "product": "dhw",
+        "variable": "degree_heating_week",
+        "producer_value": 0.0,
+        "pacioos_value": 0.0,
+        "scale_factor": 0.01,
+        "source_sha256": "09e29957179695006ed7b17e8ed2e3241b3a774afbe5621834d6679e5f15b700",
+        "source_url": "https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0/daily/dhw/2019/ct5km_dhw_v3.1_20190402.nc"
+      },
+      {
+        "date": "2019-04-02",
+        "latitude": 4.275,
+        "longitude": 118.925,
+        "product": "dhw",
+        "variable": "degree_heating_week",
+        "producer_value": 0.0,
+        "pacioos_value": 0.0,
+        "scale_factor": 0.01,
+        "source_sha256": "09e29957179695006ed7b17e8ed2e3241b3a774afbe5621834d6679e5f15b700",
+        "source_url": "https://www.star.nesdis.noaa.gov/pub/socd/mecb/crw/data/5km/v3.1_op/nc/v1.0/daily/dhw/2019/ct5km_dhw_v3.1_20190402.nc"
+      }
+    ],
+    "max_absolute_difference": 0.0,
+    "passed": true,
+    "values_verified": 12
+  },
+  "model_policy": "Use calendar reindexing; never silently bridge gaps. Drop incomplete feature/label windows."
+}

@@ -1,0 +1,80 @@
+"""Generate figures and model documentation directly from frozen evaluation outputs."""
+from pathlib import Path
+import numpy as np
+from src.features import HORIZONS
+ROOT=Path(__file__).resolve().parents[1]
+ARTIFACTS=ROOT/'artifacts'
+
+def generate_plots(p,result):
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    plt.rcParams.update({'font.size':10,'axes.spines.top':False,'axes.spines.right':False})
+    dest=ARTIFACTS/'figures';dest.mkdir(exist_ok=True)
+    test=p.loc[p.partition.eq('test')]
+    fig,axs=plt.subplots(1,2,figsize=(11,4),constrained_layout=True)
+    for ax,h in zip(axs,HORIZONS):
+        r=result['horizons'][str(h)];scores=r['partitions']['test']
+        keys=['dhw_persistence','physical_persistence','seasonal_climatology',r['best_ai']]
+        ax.barh(['DHW persistence','Physical HS persistence','Seasonal climatology','AI residual model'],
+            [scores[k]['mae'] for k in keys],color=['#b0bec5','#55a99e','#b0bec5','#126b79'])
+        ax.set_xlabel('Test MAE (degree C-weeks)');ax.set_title(f'{h}-day future DHW | 2022-2025')
+    fig.savefig(dest/'baseline_comparison.png',dpi=180);plt.close(fig)
+    sites=sorted(test.site_id.unique())
+    fig,axs=plt.subplots(len(sites),1,figsize=(12,2.6*len(sites)),sharex=True,constrained_layout=True)
+    for ax,site in zip(np.atleast_1d(axs),sites):
+        g=test.loc[test.site_id.eq(site)&test.horizon.eq(14)].sort_values('target_date')
+        ax.plot(g.target_date,g.observed,label='Observed satellite DHW',color='#172b36',lw=1.1)
+        ax.plot(g.target_date,g.selected_prediction,label='14-day forecast',color='#0c8792',lw=.8)
+        ax.fill_between(g.target_date,g.lower90,g.upper90,color='#0c8792',alpha=.15,label='Calibrated 90% interval')
+        ax.axhline(4,color='#bc7834',ls=':',lw=1);ax.set_ylabel('DHW');ax.set_title(site,loc='left')
+    axs[0].legend(ncol=3,fontsize=8);fig.savefig(dest/'test_timeseries.png',dpi=160);plt.close(fig)
+    fig,axs=plt.subplots(1,2,figsize=(10,4),constrained_layout=True)
+    for ax,h in zip(axs,HORIZONS):
+        g=test.loc[test.horizon.eq(h)]
+        ax.scatter(g.observed,g.selected_prediction,s=4,alpha=.15,c='#087e8b')
+        limit=max(g.observed.max(),g.selected_prediction.max())+.2
+        ax.plot([0,limit],[0,limit],color='#a05142',ls='--');ax.set_title(f'{h}-day test forecasts')
+        ax.set_xlabel('Observed DHW');ax.set_ylabel('Predicted DHW')
+    fig.savefig(dest/'observed_vs_predicted.png',dpi=180);plt.close(fig)
+
+def write_reports(result):
+    docs=ROOT/'docs';docs.mkdir(exist_ok=True)
+    lines=['# Model card — ReefAhead 1.0','','## Intended use and target',
+        'Research prototype for patrol preparation in the Semporna sea area. Predicts the NOAA CRW fixed-pixel DHW value exactly 7 or 14 days after the issue date. Units: degree C-weeks. It does not classify coral photographs, predict confirmed bleaching, identify coral species, or estimate avoided damage.',
+        '', '## Data and geography',
+        f"{result['data_rows']:,} daily site rows, {str(result['data_start'])[:10]} to {str(result['data_end'])[:10]}. Four 0.05-degree demonstration water pixels; these are not verified reef or dive-site boundaries. No regional moving-maximum sequence is merged into this model.",
+        '', '## Features and physical baseline',
+        'Current and lagged SST, HotSpot, anomaly and DHW; past-only rolling moments; seasonal sine/cosine; latitude/longitude; 84-day heat-stress accounting. Only HotSpot >=1 degree C contributes. Physical persistence subtracts the oldest days that leave the 84-day window and assumes current HotSpot persists through the forecast horizon. Anchoring to official DHW tolerates rounding. This is a physical-baseline residual model, not a strictly physics-constrained forecast; only nonnegativity is enforced on its point predictions. Negative official HotSpot values remain features but contribute zero accumulated stress.',
+        '', '## Training and selection',
+        'Training: 2003–2016; selection: 2017–2019; refit: 2003–2019; calibration: 2020–2021; locked test: 2022–2025; retrospective forward replay: 2026. Every partition excludes issue dates with target dates beyond its end. Two predeclared residual learners (histogram gradient boosting and random forest) compete against DHW persistence, physical persistence, and training-only seasonal climatology by pooled validation MAE. No test-based tuning, feature selection or retraining. Final fit uses labels only through 2019, including selection years.',
+        '', '## Calibration and events',
+        'Per-site 90% symmetric absolute-error calibration uses only 2020–2021 errors; intervals are clipped at zero. Temporal dependence prevents an unconditional exchangeability guarantee. Test coverage is reported. The empirical residual CDF estimates frequency of future satellite DHW>=4, not a validated probability of biological bleaching. Exact-lead threshold crossings are counted separately from strongly autocorrelated event days.',
+        '', '## Reproducibility',
+        f"Seed 42; Python {result['python']}; scikit-learn {result['sklearn']}; data SHA-256 `{result['data_sha256']}`. Fixed models never use test or 2026 labels for training or calibration.",
+        '', 'Model artifact hashes and pipeline source hashes are published in `artifacts/evaluation.json`; the pre-evaluation model-selection protocol and source hashes are in `evidence/training_protocol.json`.',
+        '', '## Limitations']
+    lines.extend('- '+s for s in result['limitations'])
+    lines += ['', '## Operational guardrails',
+        'Issue date is the input observation date, not a verified product release time. Late or missing input must prevent a current operational claim. The API emits input_age_days and stale_input. Historic archives may be revised. This remains a retrospective hindcast until prospective release-time logs and field observations are collected. A human selects patrol actions. These heat-stress signals do not authorize protected-site access or reef intervention.',
+        '', '## Primary source',
+        'NOAA CRW DHW definition and risk context: https://coralreefwatch.noaa.gov/product/5km/index_5km_dhw.php',
+        'See the project data provenance and manifest for retrieval URLs, licensing and citation information.','']
+    (docs/'model_card.md').write_text('\n'.join(lines))
+    ev=['# Evaluation report','','Frozen temporal evaluation. All daily predictions are preserved in `artifacts/test_predictions.csv`; site/year metrics in `artifacts/year_metrics.csv`. No field bleaching ground truth is available.',
+        '', '| Horizon | Selected model | Test MAE | Physical MAE | DHW persistence MAE | 90% interval coverage | DHW>=4 recall |',
+        '|---|---|---:|---:|---:|---:|---:|']
+    paragraphs=[]
+    for h,r in result['horizons'].items():
+        s=r['partitions']['test'];m=s['selected']
+        recall='NA' if m['event_recall'] is None else f"{m['event_recall']:.3f}"
+        ev.append(f"| {h} days | {r['selected_model']} | {m['mae']:.4f} | {s['physical_persistence']['mae']:.4f} | {s['dhw_persistence']['mae']:.4f} | {m['interval_coverage']:.3f} | {recall} |")
+        gain=s['selected_gain_vs_physics']
+        paragraphs.extend(['',f"{h}-day paired block-bootstrap MAE gain versus physical persistence: {gain['mae_gain']:.4f}; descriptive 95% interval [{gain['ci95_lower']:.4f}, {gain['ci95_upper']:.4f}]. Positive favors the selected model. If the interval crosses zero, superiority is not established."])
+    ev+=paragraphs+['','## Interpretation','',
+        'MAE includes all eligible site-days and may be dominated by zero-stress days. Heat-stress MAE, event precision/recall, crossing counts, site/year metrics and interval coverage must accompany it. Nearby pixels are correlated; daily row count is not an independent evidence count. Coverage below 0.90 is a demonstrated limitation and is not repaired on the test set.',
+        '', '## Reproduction','',
+        'From `.`: `OMP_NUM_THREADS=4 .venv/bin/python -m src.train`; then `.venv/bin/python -m pytest tests -q`.',
+        '', '![Baseline comparison](../artifacts/figures/baseline_comparison.png)',
+        '![Test trajectories](../artifacts/figures/test_timeseries.png)','']
+    (docs/'evaluation.md').write_text('\n'.join(ev))

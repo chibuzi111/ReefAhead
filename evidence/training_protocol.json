@@ -1,0 +1,149 @@
+{
+  "frozen_utc": "2026-10-16T03:13:17.294138+00:00",
+  "seed": 42,
+  "horizons_days": [
+    7,
+    14
+  ],
+  "target": "Satellite DHW at issue date+h, degree C-weeks",
+  "splits": {
+    "train": [
+      "2003-01-01",
+      "2016-12-31"
+    ],
+    "validation": [
+      "2017-01-01",
+      "2019-12-31"
+    ],
+    "fit": [
+      "2003-01-01",
+      "2019-12-31"
+    ],
+    "calibration": [
+      "2020-01-01",
+      "2021-12-31"
+    ],
+    "test": [
+      "2022-01-01",
+      "2025-12-31"
+    ],
+    "replay_2026": [
+      "2026-01-01",
+      "2026-12-31"
+    ]
+  },
+  "selection": "Minimum pooled validation MAE, refit AI through 2019, calibration fixed to 2020-2021, no test tuning.",
+  "candidates": {
+    "hist_gradient_boosting_residual": {
+      "categorical_features": "from_dtype",
+      "early_stopping": false,
+      "interaction_cst": null,
+      "l2_regularization": 10,
+      "learning_rate": 0.05,
+      "loss": "squared_error",
+      "max_bins": 255,
+      "max_depth": null,
+      "max_features": 1.0,
+      "max_iter": 180,
+      "max_leaf_nodes": 15,
+      "min_samples_leaf": 40,
+      "monotonic_cst": null,
+      "n_iter_no_change": 10,
+      "quantile": null,
+      "random_state": 42,
+      "scoring": "loss",
+      "tol": 1e-07,
+      "validation_fraction": 0.1,
+      "verbose": 0,
+      "warm_start": false
+    },
+    "random_forest_residual": {
+      "bootstrap": true,
+      "ccp_alpha": 0.0,
+      "criterion": "squared_error",
+      "max_depth": 14,
+      "max_features": 0.8,
+      "max_leaf_nodes": null,
+      "max_samples": null,
+      "min_impurity_decrease": 0.0,
+      "min_samples_leaf": 20,
+      "min_samples_split": 2,
+      "min_weight_fraction_leaf": 0.0,
+      "monotonic_cst": null,
+      "n_estimators": 200,
+      "n_jobs": 4,
+      "oob_score": false,
+      "random_state": 42,
+      "verbose": 0,
+      "warm_start": false
+    }
+  },
+  "baselines": [
+    "DHW persistence",
+    "HotSpot persistence with outgoing 84-day window accounting",
+    "Training-only 31-day circular seasonal climatology"
+  ],
+  "calibration": "Per-site absolute residual 90th split-conformal rank with finite-sample correction; no coverage guarantee under time dependence.",
+  "uncertainty": "Descriptive paired 90-day calendar-block bootstrap, all sites kept together, 1000 resamples, seed42.",
+  "model_selection_guardrail": "Never use 2022-2025 test or 2026 replay to select models, features, hyperparameters or calibration.",
+  "source_sha256": {
+    "src/__init__.py": "c5b175b476844e595e17824e93831ecda71cee8852bd1aa3b68a9b65bb2960ce",
+    "src/features.py": "20d1bbce1aa56de8451983d102dd65e9633f50a66b8fefcf20211dee4fca30d4",
+    "src/train.py": "e24f3179538c0979c9a1fc11c5e8db64e5774cd64c24a2244a13addb1f081b0e",
+    "src/predict.py": "6beb6880333e2d9905853fcec5533f02b9d5fd1f84674f9732af8f3c9053fef3",
+    "src/reporting.py": "0aa5ced2f6197eb024eeb8b8c7a984c69fb4a6e63d95ecb13d561a3464e7cdb3",
+    "tests/test_science.py": "8b8fc478c954b91534443d15c3921231fa587882685a3b18c3063375cb4517d4"
+  },
+  "pretraining_quality_gate": "All four inputs must be valid for 84 continuous days; no interpolation; this gate was clarified before any evaluation run.",
+  "hash_scope": "Model pipeline and its scientific tests only; application UI may evolve independently.",
+  "pretraining_documentation_update": "Reproduction command includes full pytest API integration suite; final artifact and source hashes will be public in evaluation.json.",
+  "original_source_sha256": {
+    "src/__init__.py": "c5b175b476844e595e17824e93831ecda71cee8852bd1aa3b68a9b65bb2960ce",
+    "src/features.py": "b2e0bb90d3b3b355061f0387cab8bd9e96c36ef2c42950a7afadf051f5dadea6",
+    "src/train.py": "5820980f7e4792027bac2f91e561913ea590e9c61502dd0ace59078e02ec8852",
+    "src/predict.py": "0989fdfffd078f501d15c8193459e9ec9aab0f87daa1d50b8523d7fc8b86268d",
+    "src/reporting.py": "50466c1976e8cca9e413f9198f734d40a9b7b3ee2367b880297022bb25e7c888",
+    "tests/test_science.py": "45bc63fb4b40b8c6824dd1bff7ff90148cd7f4c67ff9c7851b4dc6f0971e3159"
+  },
+  "pre_evaluation_integrity_patch": {
+    "time_utc": "2026-10-16T04:02:45.524648+00:00",
+    "file": "src/predict.py",
+    "original_sha256": "0989fdfffd078f501d15c8193459e9ec9aab0f87daa1d50b8523d7fc8b86268d",
+    "updated_sha256": "130e4ac6c5ba9553d74d311bc4afa4d220c76d206ec524366aecb1ab982c2975",
+    "reason": "Verify model artifact SHA-256 against evaluation.json before local joblib deserialization; no change to training, features, candidates, splits, hyperparameters or calibration. No performance results existed at patch time."
+  },
+  "pre_evaluation_physics_patch": {
+    "time_utc": "2026-10-16T04:11:02.700806+00:00",
+    "reason": "Prevent an arbitrarily negative learned residual from erasing heat stress that remains inside the future 84-day window. No complete evaluation or model training output existed at patch time.",
+    "formula": "max(0, DHW_t - outgoing_hotspot_sum/7 - (0.01+h*0.005/7))",
+    "tolerance_7d": 0.015,
+    "tolerance_14d": 0.02,
+    "assumption": "Nearest-0.01 DHW/HotSpot quantization; ERDDAP metadata are unpacked floats without scale_factor or rounding-policy guarantee. This is an explicitly conditional plausibility floor, not complete physical conservation.",
+    "evidence_files": [
+      "data/raw/metadata/pifsc_hs_metadata.json",
+      "data/raw/metadata/pifsc_dhw_metadata.json"
+    ],
+    "fixed_scope": "Apply to every residual AI candidate at validation and to final evaluation/inference; leave candidate regressors, features, training targets, hyperparameters, splits, baselines and interval formula unchanged.",
+    "test_data_usage": "No test/2026 performance or residuals used to choose the formula or tolerance.",
+    "previous_sha256": {
+      "src/features.py": "b2e0bb90d3b3b355061f0387cab8bd9e96c36ef2c42950a7afadf051f5dadea6",
+      "src/train.py": "5820980f7e4792027bac2f91e561913ea590e9c61502dd0ace59078e02ec8852",
+      "src/predict.py": "130e4ac6c5ba9553d74d311bc4afa4d220c76d206ec524366aecb1ab982c2975",
+      "src/reporting.py": "50466c1976e8cca9e413f9198f734d40a9b7b3ee2367b880297022bb25e7c888",
+      "tests/test_science.py": "45bc63fb4b40b8c6824dd1bff7ff90148cd7f4c67ff9c7851b4dc6f0971e3159"
+    },
+    "updated_sha256": {
+      "src/features.py": "20d1bbce1aa56de8451983d102dd65e9633f50a66b8fefcf20211dee4fca30d4",
+      "src/train.py": "9a1a39b2aa3db1a1bfb8b069533ad2bd4d3524d78dd22a9cc544d3f97d5446cf",
+      "src/predict.py": "6beb6880333e2d9905853fcec5533f02b9d5fd1f84674f9732af8f3c9053fef3",
+      "src/reporting.py": "0aa5ced2f6197eb024eeb8b8c7a984c69fb4a6e63d95ecb13d561a3464e7cdb3",
+      "tests/test_science.py": "8b8fc478c954b91534443d15c3921231fa587882685a3b18c3063375cb4517d4"
+    }
+  },
+  "pre_evaluation_output_precision_patch": {
+    "time_utc": "2026-10-16T04:18:53.741612+00:00",
+    "reason": "Preserve floating-point forecast values for independent exact event/coverage recomputation; write predictions with 17 significant digits instead of 6 decimal places. No numerical modeling changes.",
+    "previous_train_sha256": "9a1a39b2aa3db1a1bfb8b069533ad2bd4d3524d78dd22a9cc544d3f97d5446cf",
+    "updated_train_sha256": "e24f3179538c0979c9a1fc11c5e8db64e5774cd64c24a2244a13addb1f081b0e"
+  }
+}

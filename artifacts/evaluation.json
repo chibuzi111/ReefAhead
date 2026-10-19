@@ -1,0 +1,868 @@
+{
+  "project": "ReefAhead / 礁先知",
+  "version": "reefahead-1.0.0",
+  "seed": 42,
+  "data_sha256": "b795ba20b11420ed42d29c8525af1ce63c2c4cd606d3a80074030998b42c1062",
+  "data_path": "data/processed/daily.csv",
+  "data_rows": 34744,
+  "data_start": "2003-01-01",
+  "data_end": "2026-10-12",
+  "sites": [
+    {
+      "site_id": "semporna_offshore_1",
+      "latitude": 4.275,
+      "longitude": 118.725
+    },
+    {
+      "site_id": "semporna_offshore_2",
+      "latitude": 4.275,
+      "longitude": 118.825
+    },
+    {
+      "site_id": "semporna_offshore_3",
+      "latitude": 4.275,
+      "longitude": 118.925
+    },
+    {
+      "site_id": "semporna_south_central",
+      "latitude": 4.275,
+      "longitude": 118.625
+    }
+  ],
+  "splits": {
+    "train": [
+      "2003-01-01",
+      "2016-12-31"
+    ],
+    "validation": [
+      "2017-01-01",
+      "2019-12-31"
+    ],
+    "fit": [
+      "2003-01-01",
+      "2019-12-31"
+    ],
+    "calibration": [
+      "2020-01-01",
+      "2021-12-31"
+    ],
+    "test": [
+      "2022-01-01",
+      "2025-12-31"
+    ],
+    "replay_2026": [
+      "2026-01-01",
+      "2026-12-31"
+    ]
+  },
+  "horizons": {
+    "7": {
+      "horizon_days": 7,
+      "target": "DHW at issue date + horizon, degree C-weeks",
+      "validation": {
+        "dhw_persistence": {
+          "n": 4352,
+          "mae": 0.04537454044117647,
+          "rmse": 0.14952152547670972,
+          "bias": -0.003940716911764706,
+          "event_days_ge4": 0,
+          "event_prevalence": 0.0,
+          "event_precision": null,
+          "event_recall": null,
+          "event_f1": null,
+          "true_positive": 0,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 4352,
+          "heat_stress_mae": null
+        },
+        "physical_persistence": {
+          "n": 4352,
+          "mae": 0.036528033088235295,
+          "rmse": 0.15765912764239684,
+          "bias": 4.10320378151265e-05,
+          "event_days_ge4": 0,
+          "event_prevalence": 0.0,
+          "event_precision": null,
+          "event_recall": null,
+          "event_f1": null,
+          "true_positive": 0,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 4352,
+          "heat_stress_mae": null
+        },
+        "seasonal_climatology": {
+          "n": 4352,
+          "mae": 0.29476795937390426,
+          "rmse": 0.4534858133968493,
+          "bias": -0.03367902087027716,
+          "event_days_ge4": 0,
+          "event_prevalence": 0.0,
+          "event_precision": null,
+          "event_recall": null,
+          "event_f1": null,
+          "true_positive": 0,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 4352,
+          "heat_stress_mae": null
+        },
+        "hist_gradient_boosting_residual": {
+          "n": 4352,
+          "mae": 0.041419952377451476,
+          "rmse": 0.11496292436580498,
+          "bias": 0.00782434489882056,
+          "event_days_ge4": 0,
+          "event_prevalence": 0.0,
+          "event_precision": null,
+          "event_recall": null,
+          "event_f1": null,
+          "true_positive": 0,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 4352,
+          "heat_stress_mae": null
+        },
+        "random_forest_residual": {
+          "n": 4352,
+          "mae": 0.037921339805289424,
+          "rmse": 0.10639141091413297,
+          "bias": 0.006287840186249736,
+          "event_days_ge4": 0,
+          "event_prevalence": 0.0,
+          "event_precision": null,
+          "event_recall": null,
+          "event_f1": null,
+          "true_positive": 0,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 4352,
+          "heat_stress_mae": null
+        }
+      },
+      "selection_rule": "Lowest pooled daily validation MAE; test never used for selection.",
+      "best_ai": "random_forest_residual",
+      "selected_model": "physical_persistence",
+      "split_counts": {
+        "train": 20096,
+        "validation": 4352,
+        "fit": 24476,
+        "calibration": 2896,
+        "test": 5816,
+        "replay_2026": 1112
+      },
+      "calibration": {
+        "semporna_offshore_1": {
+          "n": 724,
+          "radius90": 0.16
+        },
+        "semporna_offshore_2": {
+          "n": 724,
+          "radius90": 0.14285714285714285
+        },
+        "semporna_offshore_3": {
+          "n": 724,
+          "radius90": 0.008571428571428563
+        },
+        "semporna_south_central": {
+          "n": 724,
+          "radius90": 0.29000000000000026
+        }
+      },
+      "partitions": {
+        "calibration": {
+          "dhw_persistence": {
+            "n": 2896,
+            "mae": 0.14351519337016574,
+            "rmse": 0.3487180548350713,
+            "bias": -0.0020994475138121577,
+            "event_days_ge4": 223,
+            "event_prevalence": 0.07700276243093923,
+            "event_precision": 0.905829596412556,
+            "event_recall": 0.905829596412556,
+            "event_f1": 0.905829596412556,
+            "true_positive": 202,
+            "false_positive": 21,
+            "false_negative": 21,
+            "true_negative": 2652,
+            "heat_stress_mae": 0.4886098654708521
+          },
+          "physical_persistence": {
+            "n": 2896,
+            "mae": 0.06587805840568271,
+            "rmse": 0.21649375745665764,
+            "bias": 5.919494869772765e-06,
+            "event_days_ge4": 223,
+            "event_prevalence": 0.07700276243093923,
+            "event_precision": 0.9521739130434783,
+            "event_recall": 0.9820627802690582,
+            "event_f1": 0.9668874172185431,
+            "true_positive": 219,
+            "false_positive": 11,
+            "false_negative": 4,
+            "true_negative": 2662,
+            "heat_stress_mae": 0.17184497117232542
+          },
+          "seasonal_climatology": {
+            "n": 2896,
+            "mae": 0.7987315268625784,
+            "rmse": 1.6356807061029308,
+            "bias": -0.6312717981267061,
+            "event_days_ge4": 223,
+            "event_prevalence": 0.07700276243093923,
+            "event_precision": null,
+            "event_recall": 0.0,
+            "event_f1": 0.0,
+            "true_positive": 0,
+            "false_positive": 0,
+            "false_negative": 223,
+            "true_negative": 2673,
+            "heat_stress_mae": 5.107938921554446
+          },
+          "random_forest_residual": {
+            "n": 2896,
+            "mae": 0.0761590401824103,
+            "rmse": 0.15830783585314886,
+            "bias": 0.0007645939890993672,
+            "event_days_ge4": 223,
+            "event_prevalence": 0.07700276243093923,
+            "event_precision": 0.9859154929577465,
+            "event_recall": 0.9417040358744395,
+            "event_f1": 0.963302752293578,
+            "true_positive": 210,
+            "false_positive": 3,
+            "false_negative": 13,
+            "true_negative": 2670,
+            "heat_stress_mae": 0.18776174895883968
+          },
+          "selected": {
+            "n": 2896,
+            "mae": 0.06587805840568271,
+            "rmse": 0.21649375745665764,
+            "bias": 5.919494869772765e-06,
+            "event_days_ge4": 223,
+            "event_prevalence": 0.07700276243093923,
+            "event_precision": 0.9521739130434783,
+            "event_recall": 0.9820627802690582,
+            "event_f1": 0.9668874172185431,
+            "true_positive": 219,
+            "false_positive": 11,
+            "false_negative": 4,
+            "true_negative": 2662,
+            "heat_stress_mae": 0.17184497117232542,
+            "interval_coverage": 0.9019337016574586,
+            "mean_interval_width": 0.22416140489344918,
+            "brier_score_ge4": 0.004911196795947749
+          }
+        },
+        "test": {
+          "dhw_persistence": {
+            "n": 5816,
+            "mae": 0.1438566024759285,
+            "rmse": 0.3402702168794467,
+            "bias": 0.002587689133425031,
+            "event_days_ge4": 216,
+            "event_prevalence": 0.037138927097661624,
+            "event_precision": 0.9027777777777778,
+            "event_recall": 0.9027777777777778,
+            "event_f1": 0.9027777777777778,
+            "true_positive": 195,
+            "false_positive": 21,
+            "false_negative": 21,
+            "true_negative": 5579,
+            "heat_stress_mae": 0.47375
+          },
+          "physical_persistence": {
+            "n": 5816,
+            "mae": 0.0665597366869719,
+            "rmse": 0.2137532669071846,
+            "bias": 5.2564354490077314e-05,
+            "event_days_ge4": 216,
+            "event_prevalence": 0.037138927097661624,
+            "event_precision": 0.9375,
+            "event_recall": 0.9722222222222222,
+            "event_f1": 0.9545454545454546,
+            "true_positive": 210,
+            "false_positive": 14,
+            "false_negative": 6,
+            "true_negative": 5586,
+            "heat_stress_mae": 0.16294973544973548
+          },
+          "seasonal_climatology": {
+            "n": 5816,
+            "mae": 0.7238977173296786,
+            "rmse": 1.357486566878373,
+            "bias": -0.6197077201943415,
+            "event_days_ge4": 216,
+            "event_prevalence": 0.037138927097661624,
+            "event_precision": null,
+            "event_recall": 0.0,
+            "event_f1": 0.0,
+            "true_positive": 0,
+            "false_positive": 0,
+            "false_negative": 216,
+            "true_negative": 5600,
+            "heat_stress_mae": 4.981573459132757
+          },
+          "random_forest_residual": {
+            "n": 5816,
+            "mae": 0.07170816806240327,
+            "rmse": 0.16757086718721842,
+            "bias": -0.003120095976464676,
+            "event_days_ge4": 216,
+            "event_prevalence": 0.037138927097661624,
+            "event_precision": 1.0,
+            "event_recall": 0.9259259259259259,
+            "event_f1": 0.9615384615384616,
+            "true_positive": 200,
+            "false_positive": 0,
+            "false_negative": 16,
+            "true_negative": 5600,
+            "heat_stress_mae": 0.2014860826786866
+          },
+          "selected": {
+            "n": 5816,
+            "mae": 0.0665597366869719,
+            "rmse": 0.2137532669071846,
+            "bias": 5.2564354490077314e-05,
+            "event_days_ge4": 216,
+            "event_prevalence": 0.037138927097661624,
+            "event_precision": 0.9375,
+            "event_recall": 0.9722222222222222,
+            "event_f1": 0.9545454545454546,
+            "true_positive": 210,
+            "false_positive": 14,
+            "false_negative": 6,
+            "true_negative": 5586,
+            "heat_stress_mae": 0.16294973544973548,
+            "interval_coverage": 0.8889270976616231,
+            "mean_interval_width": 0.2426660444095108,
+            "brier_score_ge4": 0.003173140731273434
+          },
+          "selected_gain_vs_physics": {
+            "method": "Paired non-overlapping 90-day calendar blocks, sites grouped, 1000 bootstrap resamples; descriptive.",
+            "mae_gain": 0.0,
+            "ci95_lower": 0.0,
+            "ci95_upper": 0.0,
+            "blocks": 17
+          },
+          "onsets": {
+            "n": 3,
+            "exact_lead_hits": 2,
+            "note": "Nearby site episodes remain correlated; no field bleaching labels."
+          }
+        },
+        "replay_2026": {
+          "dhw_persistence": {
+            "n": 1112,
+            "mae": 0.24632194244604314,
+            "rmse": 0.5269546517832168,
+            "bias": 0.005728417266187048,
+            "event_days_ge4": 264,
+            "event_prevalence": 0.23741007194244604,
+            "event_precision": 0.8939393939393939,
+            "event_recall": 0.8939393939393939,
+            "event_f1": 0.8939393939393939,
+            "true_positive": 236,
+            "false_positive": 28,
+            "false_negative": 28,
+            "true_negative": 820,
+            "heat_stress_mae": 0.1856818181818182
+          },
+          "physical_persistence": {
+            "n": 1112,
+            "mae": 0.05460303186022611,
+            "rmse": 0.18602814118929545,
+            "bias": 6.038026721479921e-05,
+            "event_days_ge4": 264,
+            "event_prevalence": 0.23741007194244604,
+            "event_precision": 0.9776119402985075,
+            "event_recall": 0.9924242424242424,
+            "event_f1": 0.9849624060150376,
+            "true_positive": 262,
+            "false_positive": 6,
+            "false_negative": 2,
+            "true_negative": 842,
+            "heat_stress_mae": 0.11111471861471865
+          },
+          "seasonal_climatology": {
+            "n": 1112,
+            "mae": 1.2072732935694976,
+            "rmse": 2.0496246834448364,
+            "bias": -1.1484477932339512,
+            "event_days_ge4": 264,
+            "event_prevalence": 0.23741007194244604,
+            "event_precision": null,
+            "event_recall": 0.0,
+            "event_f1": 0.0,
+            "true_positive": 0,
+            "false_positive": 0,
+            "false_negative": 264,
+            "true_negative": 848,
+            "heat_stress_mae": 3.879759861422575
+          },
+          "random_forest_residual": {
+            "n": 1112,
+            "mae": 0.08777643453223175,
+            "rmse": 0.20803767169774162,
+            "bias": -0.021767830804964455,
+            "event_days_ge4": 264,
+            "event_prevalence": 0.23741007194244604,
+            "event_precision": 1.0,
+            "event_recall": 0.9810606060606061,
+            "event_f1": 0.9904397705544933,
+            "true_positive": 259,
+            "false_positive": 0,
+            "false_negative": 5,
+            "true_negative": 848,
+            "heat_stress_mae": 0.10952951738576347
+          },
+          "selected": {
+            "n": 1112,
+            "mae": 0.05460303186022611,
+            "rmse": 0.18602814118929545,
+            "bias": 6.038026721479921e-05,
+            "event_days_ge4": 264,
+            "event_prevalence": 0.23741007194244604,
+            "event_precision": 0.9776119402985075,
+            "event_recall": 0.9924242424242424,
+            "event_f1": 0.9849624060150376,
+            "true_positive": 262,
+            "false_positive": 6,
+            "false_negative": 2,
+            "true_negative": 842,
+            "heat_stress_mae": 0.11111471861471865,
+            "interval_coverage": 0.914568345323741,
+            "mean_interval_width": 0.21994347379239482,
+            "brier_score_ge4": 0.0069669900125807595
+          }
+        }
+      }
+    },
+    "14": {
+      "horizon_days": 14,
+      "target": "DHW at issue date + horizon, degree C-weeks",
+      "validation": {
+        "dhw_persistence": {
+          "n": 4324,
+          "mae": 0.09133672525439408,
+          "rmse": 0.24637332442073342,
+          "bias": -0.007932469935245143,
+          "event_days_ge4": 0,
+          "event_prevalence": 0.0,
+          "event_precision": null,
+          "event_recall": null,
+          "event_f1": null,
+          "true_positive": 0,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 4324,
+          "heat_stress_mae": null
+        },
+        "physical_persistence": {
+          "n": 4324,
+          "mae": 0.08063895863618342,
+          "rmse": 0.31793176403311435,
+          "bias": 8.854235496233728e-05,
+          "event_days_ge4": 0,
+          "event_prevalence": 0.0,
+          "event_precision": 0.0,
+          "event_recall": null,
+          "event_f1": 0.0,
+          "true_positive": 0,
+          "false_positive": 1,
+          "false_negative": 0,
+          "true_negative": 4323,
+          "heat_stress_mae": null
+        },
+        "seasonal_climatology": {
+          "n": 4324,
+          "mae": 0.29638080627610686,
+          "rmse": 0.45492842065089123,
+          "bias": -0.03385505311306133,
+          "event_days_ge4": 0,
+          "event_prevalence": 0.0,
+          "event_precision": null,
+          "event_recall": null,
+          "event_f1": null,
+          "true_positive": 0,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 4324,
+          "heat_stress_mae": null
+        },
+        "hist_gradient_boosting_residual": {
+          "n": 4324,
+          "mae": 0.0831400992011766,
+          "rmse": 0.2059197266247227,
+          "bias": 0.01774318323178885,
+          "event_days_ge4": 0,
+          "event_prevalence": 0.0,
+          "event_precision": null,
+          "event_recall": null,
+          "event_f1": null,
+          "true_positive": 0,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 4324,
+          "heat_stress_mae": null
+        },
+        "random_forest_residual": {
+          "n": 4324,
+          "mae": 0.07976402761490113,
+          "rmse": 0.1951297062765204,
+          "bias": 0.014940755973207872,
+          "event_days_ge4": 0,
+          "event_prevalence": 0.0,
+          "event_precision": null,
+          "event_recall": null,
+          "event_f1": null,
+          "true_positive": 0,
+          "false_positive": 0,
+          "false_negative": 0,
+          "true_negative": 4324,
+          "heat_stress_mae": null
+        }
+      },
+      "selection_rule": "Lowest pooled daily validation MAE; test never used for selection.",
+      "best_ai": "random_forest_residual",
+      "selected_model": "random_forest_residual",
+      "split_counts": {
+        "train": 20068,
+        "validation": 4324,
+        "fit": 24448,
+        "calibration": 2868,
+        "test": 5788,
+        "replay_2026": 1084
+      },
+      "calibration": {
+        "semporna_offshore_1": {
+          "n": 717,
+          "radius90": 0.40199155634876654
+        },
+        "semporna_offshore_2": {
+          "n": 717,
+          "radius90": 0.30480711831211316
+        },
+        "semporna_offshore_3": {
+          "n": 717,
+          "radius90": 0.23665135662789855
+        },
+        "semporna_south_central": {
+          "n": 717,
+          "radius90": 0.5350402401991207
+        }
+      },
+      "partitions": {
+        "calibration": {
+          "dhw_persistence": {
+            "n": 2868,
+            "mae": 0.28363319386331937,
+            "rmse": 0.6578971508434021,
+            "bias": -0.006269177126917717,
+            "event_days_ge4": 223,
+            "event_prevalence": 0.07775453277545327,
+            "event_precision": 0.8116591928251121,
+            "event_recall": 0.8116591928251121,
+            "event_f1": 0.8116591928251121,
+            "true_positive": 181,
+            "false_positive": 42,
+            "false_negative": 42,
+            "true_negative": 2603,
+            "heat_stress_mae": 0.9943497757847534
+          },
+          "physical_persistence": {
+            "n": 2868,
+            "mae": 0.14618001593943017,
+            "rmse": 0.4399163221640697,
+            "bias": 3.237696752341071e-05,
+            "event_days_ge4": 223,
+            "event_prevalence": 0.07775453277545327,
+            "event_precision": 0.9316239316239316,
+            "event_recall": 0.9775784753363229,
+            "event_f1": 0.9540481400437637,
+            "true_positive": 218,
+            "false_positive": 16,
+            "false_negative": 5,
+            "true_negative": 2629,
+            "heat_stress_mae": 0.41470852017937226
+          },
+          "seasonal_climatology": {
+            "n": 2868,
+            "mae": 0.8031639474329635,
+            "rmse": 1.6429144625929486,
+            "bias": -0.6341684178140103,
+            "event_days_ge4": 223,
+            "event_prevalence": 0.07775453277545327,
+            "event_precision": null,
+            "event_recall": 0.0,
+            "event_f1": 0.0,
+            "true_positive": 0,
+            "false_positive": 0,
+            "false_negative": 223,
+            "true_negative": 2645,
+            "heat_stress_mae": 5.107938921554446
+          },
+          "random_forest_residual": {
+            "n": 2868,
+            "mae": 0.13618324694170159,
+            "rmse": 0.2899981227111649,
+            "bias": -0.01264687172943204,
+            "event_days_ge4": 223,
+            "event_prevalence": 0.07775453277545327,
+            "event_precision": 0.970873786407767,
+            "event_recall": 0.8968609865470852,
+            "event_f1": 0.9324009324009324,
+            "true_positive": 200,
+            "false_positive": 6,
+            "false_negative": 23,
+            "true_negative": 2639,
+            "heat_stress_mae": 0.3932211102331341
+          },
+          "selected": {
+            "n": 2868,
+            "mae": 0.13618324694170159,
+            "rmse": 0.2899981227111649,
+            "bias": -0.01264687172943204,
+            "event_days_ge4": 223,
+            "event_prevalence": 0.07775453277545327,
+            "event_precision": 0.970873786407767,
+            "event_recall": 0.8968609865470852,
+            "event_f1": 0.9324009324009324,
+            "true_positive": 200,
+            "false_positive": 6,
+            "false_negative": 23,
+            "true_negative": 2639,
+            "heat_stress_mae": 0.3932211102331341,
+            "interval_coverage": 0.902370990237099,
+            "mean_interval_width": 0.5733906164159259,
+            "brier_score_ge4": 0.008805726492723463
+          }
+        },
+        "test": {
+          "dhw_persistence": {
+            "n": 5788,
+            "mae": 0.2865877677954388,
+            "rmse": 0.6248759241043174,
+            "bias": 0.0041793365583966775,
+            "event_days_ge4": 216,
+            "event_prevalence": 0.03731859018659295,
+            "event_precision": 0.8055555555555556,
+            "event_recall": 0.8055555555555556,
+            "event_f1": 0.8055555555555556,
+            "true_positive": 174,
+            "false_positive": 42,
+            "false_negative": 42,
+            "true_negative": 5530,
+            "heat_stress_mae": 0.9981944444444445
+          },
+          "physical_persistence": {
+            "n": 5788,
+            "mae": 0.16195626419192416,
+            "rmse": 0.4688074712663583,
+            "bias": 0.00010070095764636257,
+            "event_days_ge4": 216,
+            "event_prevalence": 0.03731859018659295,
+            "event_precision": 0.6866666666666666,
+            "event_recall": 0.9537037037037037,
+            "event_f1": 0.7984496124031008,
+            "true_positive": 206,
+            "false_positive": 94,
+            "false_negative": 10,
+            "true_negative": 5478,
+            "heat_stress_mae": 0.4409126984126984
+          },
+          "seasonal_climatology": {
+            "n": 5788,
+            "mae": 0.7238944400319716,
+            "rmse": 1.3595063506710656,
+            "bias": -0.6192004138849224,
+            "event_days_ge4": 216,
+            "event_prevalence": 0.03731859018659295,
+            "event_precision": null,
+            "event_recall": 0.0,
+            "event_f1": 0.0,
+            "true_positive": 0,
+            "false_positive": 0,
+            "false_negative": 216,
+            "true_negative": 5572,
+            "heat_stress_mae": 4.981573459132757
+          },
+          "random_forest_residual": {
+            "n": 5788,
+            "mae": 0.14216794582071096,
+            "rmse": 0.3259118451239077,
+            "bias": -0.021273808629506168,
+            "event_days_ge4": 216,
+            "event_prevalence": 0.03731859018659295,
+            "event_precision": 0.9842105263157894,
+            "event_recall": 0.8657407407407407,
+            "event_f1": 0.9211822660098522,
+            "true_positive": 187,
+            "false_positive": 3,
+            "false_negative": 29,
+            "true_negative": 5569,
+            "heat_stress_mae": 0.4873455491749915
+          },
+          "selected": {
+            "n": 5788,
+            "mae": 0.14216794582071096,
+            "rmse": 0.3259118451239077,
+            "bias": -0.021273808629506168,
+            "event_days_ge4": 216,
+            "event_prevalence": 0.03731859018659295,
+            "event_precision": 0.9842105263157894,
+            "event_recall": 0.8657407407407407,
+            "event_f1": 0.9211822660098522,
+            "true_positive": 187,
+            "false_positive": 3,
+            "false_negative": 29,
+            "true_negative": 5569,
+            "heat_stress_mae": 0.4873455491749915,
+            "interval_coverage": 0.8902902557014513,
+            "mean_interval_width": 0.5885014185227041,
+            "brier_score_ge4": 0.00474936217545352
+          },
+          "selected_gain_vs_physics": {
+            "method": "Paired non-overlapping 90-day calendar blocks, sites grouped, 1000 bootstrap resamples; descriptive.",
+            "mae_gain": 0.019788318371213205,
+            "ci95_lower": -0.003064362827677865,
+            "ci95_upper": 0.04283270400974344,
+            "blocks": 17
+          },
+          "onsets": {
+            "n": 3,
+            "exact_lead_hits": 0,
+            "note": "Nearby site episodes remain correlated; no field bleaching labels."
+          }
+        },
+        "replay_2026": {
+          "dhw_persistence": {
+            "n": 1084,
+            "mae": 0.5047970479704798,
+            "rmse": 1.016867159066607,
+            "bias": 0.011180811808118092,
+            "event_days_ge4": 264,
+            "event_prevalence": 0.24354243542435425,
+            "event_precision": 0.7878787878787878,
+            "event_recall": 0.7878787878787878,
+            "event_f1": 0.7878787878787878,
+            "true_positive": 208,
+            "false_positive": 56,
+            "false_negative": 56,
+            "true_negative": 764,
+            "heat_stress_mae": 0.47378787878787876
+          },
+          "physical_persistence": {
+            "n": 1084,
+            "mae": 0.1672641012124407,
+            "rmse": 0.5060866405840941,
+            "bias": 0.00012387981022668275,
+            "event_days_ge4": 264,
+            "event_prevalence": 0.24354243542435425,
+            "event_precision": 0.9961389961389961,
+            "event_recall": 0.9772727272727273,
+            "event_f1": 0.9866156787762906,
+            "true_positive": 258,
+            "false_positive": 1,
+            "false_negative": 6,
+            "true_negative": 819,
+            "heat_stress_mae": 0.37556818181818186
+          },
+          "seasonal_climatology": {
+            "n": 1084,
+            "mae": 1.2340725676607969,
+            "rmse": 2.075664771610853,
+            "bias": -1.173852251837449,
+            "event_days_ge4": 264,
+            "event_prevalence": 0.24354243542435425,
+            "event_precision": null,
+            "event_recall": 0.0,
+            "event_f1": 0.0,
+            "true_positive": 0,
+            "false_positive": 0,
+            "false_negative": 264,
+            "true_negative": 820,
+            "heat_stress_mae": 3.879759861422575
+          },
+          "random_forest_residual": {
+            "n": 1084,
+            "mae": 0.18370552181925495,
+            "rmse": 0.4564064202942568,
+            "bias": -0.08266926595346176,
+            "event_days_ge4": 264,
+            "event_prevalence": 0.24354243542435425,
+            "event_precision": 1.0,
+            "event_recall": 0.8977272727272727,
+            "event_f1": 0.9461077844311377,
+            "true_positive": 237,
+            "false_positive": 0,
+            "false_negative": 27,
+            "true_negative": 820,
+            "heat_stress_mae": 0.2754046239587526
+          },
+          "selected": {
+            "n": 1084,
+            "mae": 0.18370552181925495,
+            "rmse": 0.4564064202942568,
+            "bias": -0.08266926595346176,
+            "event_days_ge4": 264,
+            "event_prevalence": 0.24354243542435425,
+            "event_precision": 1.0,
+            "event_recall": 0.8977272727272727,
+            "event_f1": 0.9461077844311377,
+            "true_positive": 237,
+            "false_positive": 0,
+            "false_negative": 27,
+            "true_negative": 820,
+            "heat_stress_mae": 0.2754046239587526,
+            "interval_coverage": 0.8634686346863468,
+            "mean_interval_width": 0.5406413810657056,
+            "brier_score_ge4": 0.023094165878021943
+          }
+        }
+      }
+    }
+  },
+  "python": "3.14.7",
+  "sklearn": "1.9.1",
+  "runtime_seconds": 84.15,
+  "model_artifacts": {
+    "7": {
+      "path": "./artifacts/model_7d.joblib",
+      "sha256": "4b1eeede6318f8aa45fd898fa16c617883bf5d3835af5e6713fb3f126065a88b"
+    },
+    "14": {
+      "path": "./artifacts/model_14d.joblib",
+      "sha256": "1f432912ad772991ce39106bd71be052984b35ba2dc343b141112c88f167ac7e"
+    }
+  },
+  "pipeline_source_sha256": {
+    "src/__init__.py": "c5b175b476844e595e17824e93831ecda71cee8852bd1aa3b68a9b65bb2960ce",
+    "src/features.py": "20d1bbce1aa56de8451983d102dd65e9633f50a66b8fefcf20211dee4fca30d4",
+    "src/train.py": "e24f3179538c0979c9a1fc11c5e8db64e5774cd64c24a2244a13addb1f081b0e",
+    "src/predict.py": "6beb6880333e2d9905853fcec5533f02b9d5fd1f84674f9732af8f3c9053fef3",
+    "src/reporting.py": "0aa5ced2f6197eb024eeb8b8c7a984c69fb4a6e63d95ecb13d561a3464e7cdb3"
+  },
+  "retained_heat_floor": {
+    "formula": "max(0, current_DHW - expiring_HS_sum/7 - (0.01 + h*0.005/7))",
+    "tolerances_degree_C_weeks": {
+      "7": 0.015,
+      "14": 0.02
+    },
+    "scope": "All residual-AI candidate and final point predictions; baselines and symmetric calibration interval formula are unchanged.",
+    "assumption": "Nearest-0.01 DHW and HotSpot quantization. ERDDAP metadata do not establish the original rounding rule; this is a plausibility constraint, not a complete physical guarantee.",
+    "fixed_before_evaluation": true
+  },
+  "scientific_scope": "Retrospective forecasts of NOAA CRW fixed-pixel satellite DHW, not observed bleaching or ecological recovery.",
+  "limitations": [
+    "Four nearby demonstration water pixels; no verified reef geometry, field bleaching labels or independent spatial validation.",
+    "Archives were downloaded retrospectively; issue dates assume same-day inputs, not verified operational availability.",
+    "Autocorrelated temporal calibration does not guarantee 90% future coverage; observed test coverage is reported.",
+    "DHW>=4 is a thermal-stress indicator, not an official Bleaching Alert Area category or proof of bleaching.",
+    "Forecasts require 84 uninterrupted input days; no interpolation or future climate covariates.",
+    "Four sites and daily horizons are correlated; row count is not independent sample size.",
+    "Extreme warming beyond training conditions can invalidate residual corrections and intervals; physical-baseline residual trees do not guarantee extrapolation to unprecedented events."
+  ]
+}

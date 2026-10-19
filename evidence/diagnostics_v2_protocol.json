@@ -1,0 +1,39 @@
+{
+  "created_at_utc": "2026-10-18T10:36:04.948124+00:00",
+  "version": "reefahead-diagnostics-1.1.0",
+  "designed_after_v1_test_and_replay_observed": true,
+  "evidence_status": "exploratory retrospective diagnostics; not a new holdout or a new forecast model",
+  "reference": "Raw same-pixel input ranges from 2003-01-01 through 2019-12-31; no test/replay labels in rules.",
+  "point_forecasts_and_v1_intervals": "Unchanged.",
+  "review_rules": [
+    "stale input in live API",
+    "current input outside fitting-era marginal min/max",
+    "AI/physical point estimates disagree at satellite DHW>=4",
+    "uncalibrated comparison envelope spans DHW=4",
+    "reference/forecast unavailable"
+  ],
+  "envelope": "[min(v1 lower, AI point, physical point, selected point), max(v1 upper, AI point, physical point, selected point)]; no nominal coverage level.",
+  "freshness_replay": "Historical release timestamps unavailable. Staleness is NOT reconstructed in offline rule rates; diagnostics assume observation-day input for this descriptive replay only.",
+  "regional_episode_proxy": "All four existing nearby demonstration pixels are one declared Semporna demo region. Merge consecutive pixel upcrossing dates separated by <=84 days within the same partition. This is a retrospective proxy, not ecological independence or a defined climate season.",
+  "no_test_tuning": "No threshold, hyperparameter, candidate selection or recalibration optimized against these diagnostics.",
+  "frozen_v1_hashes": {
+    "src/__init__.py": "c5b175b476844e595e17824e93831ecda71cee8852bd1aa3b68a9b65bb2960ce",
+    "src/features.py": "20d1bbce1aa56de8451983d102dd65e9633f50a66b8fefcf20211dee4fca30d4",
+    "src/train.py": "e24f3179538c0979c9a1fc11c5e8db64e5774cd64c24a2244a13addb1f081b0e",
+    "src/predict.py": "6beb6880333e2d9905853fcec5533f02b9d5fd1f84674f9732af8f3c9053fef3",
+    "src/reporting.py": "0aa5ced2f6197eb024eeb8b8c7a984c69fb4a6e63d95ecb13d561a3464e7cdb3",
+    "tests/test_science.py": "8b8fc478c954b91534443d15c3921231fa587882685a3b18c3063375cb4517d4",
+    "evidence/training_protocol.json": "efb06246324ca5ed48bddb4f7ac848dc35a970b5b3e0143da3948b19999916b0",
+    "artifacts/evaluation.json": "15888298d8c48a67e70662292c0b2cc7789612df0e085252e9937c9887cb5ec8",
+    "artifacts/model_7d.joblib": "4b1eeede6318f8aa45fd898fa16c617883bf5d3835af5e6713fb3f126065a88b",
+    "artifacts/model_14d.joblib": "1f432912ad772991ce39106bd71be052984b35ba2dc343b141112c88f167ac7e",
+    "artifacts/all_predictions.csv": "71d0167811cbdac328740c3555306bc2103a295bd61a162345133da1b5fa39b0",
+    "artifacts/test_predictions.csv": "861ddb693a7851814371eefe990344262486f19690708aca2b3350875fc1a931",
+    "artifacts/replay_2026_predictions.csv": "deafbd372fc3a5e905db2d7693fc482d45195f7ff58ace2ac11670c273738581",
+    "artifacts/validation_predictions.csv": "de6138987fb0dcbc2bf1364fa934a9b27e0e32cf11b5e405560ed5219a0f025f"
+  },
+  "new_source_sha256": {
+    "src/diagnostics.py": "69fdec1b0d81ab39b7c35af25f2819bd849b2aee11ea7a02d4c124197f4f1fca",
+    "scripts/evaluate_v2.py": "eaa14dacf2e3ae786728dfce683b5823ce709497016ab824b7eb4801bef93d65"
+  }
+}

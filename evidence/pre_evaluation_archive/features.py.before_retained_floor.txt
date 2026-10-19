@@ -1,0 +1,86 @@
+"""Past-only features, calendar lags and fixed temporal partitions.
+
+DHW: degree C-weeks. HotSpot: degree C. Only HotSpot >=1 contributes
+to the 84-day accumulation. No interpolation of missing input observations.
+"""
+from pathlib import Path
+import os
+import numpy as np
+import pandas as pd
+DEFAULT_DATA = Path(os.environ.get('CLIMATE_DATA_DIR','data'))/'processed'/'daily.csv'
+HORIZONS = (7, 14)
+REQUIRED = ['date', 'site_id', 'latitude', 'longitude', 'sst', 'hotspot', 'dhw', 'ssta']
+SPLITS = {
+    'train': ('2003-01-01', '2016-12-31'),
+    'validation': ('2017-01-01', '2019-12-31'),
+    'fit': ('2003-01-01', '2019-12-31'),
+    'calibration': ('2020-01-01', '2021-12-31'),
+    'test': ('2022-01-01', '2025-12-31'),
+    'replay_2026': ('2026-01-01', '2026-12-31'),
+}
+
+def load_data(path=DEFAULT_DATA):
+    df = pd.read_csv(path)
+    missing = set(REQUIRED) - set(df.columns)
+    if missing: raise ValueError(f'Missing required columns: {sorted(missing)}')
+    df['date'] = pd.to_datetime(df['date'], utc=True).dt.tz_localize(None).dt.normalize()
+    if df.duplicated(['site_id', 'date']).any():
+        raise ValueError('Duplicate site/date rows; resolve at ingestion, never silently average.')
+    if df['date'].isna().any() or df['site_id'].isna().any():
+        raise ValueError('Missing site identifier or date.')
+    for col in REQUIRED[2:]: df[col] = pd.to_numeric(df[col], errors='raise')
+    for col in ['latitude','longitude','sst','hotspot','dhw','ssta']:
+        if not np.isfinite(df[col].dropna().to_numpy()).all():
+            raise ValueError(f'Non-finite values in {col}. Missing values invalidate dependent forecast windows.')
+    if not df['sst'].dropna().between(-3,40).all() or not df['dhw'].dropna().ge(0).all():
+        raise ValueError('Implausible satellite temperature/DHW values.')
+    if not df['latitude'].dropna().between(-90,90).all() or not df['longitude'].dropna().between(-180,180).all():
+        raise ValueError('Invalid latitude/longitude.')
+    if (df.groupby('site_id')[['latitude','longitude']].nunique() > 1).any().any():
+        raise ValueError('A site_id must represent one fixed satellite pixel.')
+    return df.sort_values(['site_id','date']).reset_index(drop=True)
+
+def build_features(df):
+    chunks = []; feature_names = None
+    for site_id, site in df.groupby('site_id', sort=True):
+        site = site.sort_values('date').set_index('date')
+        site = site.reindex(pd.date_range(site.index.min(), site.index.max(), freq='D'))
+        f = pd.DataFrame(index=site.index); f['site_id'] = site_id
+        for col in ['latitude','longitude']: f[col] = site[col].dropna().iloc[0]
+        doy = site.index.dayofyear
+        f['season_sin'] = np.sin(2*np.pi*doy/365.2425)
+        f['season_cos'] = np.cos(2*np.pi*doy/365.2425)
+        for col in ['sst','hotspot','dhw','ssta']:
+            f[col] = site[col]
+            for lag in [1,3,7,14,28]: f[f'{col}_lag{lag}'] = site[col].shift(lag)
+            for w in [7,14,28]:
+                roll = site[col].rolling(w,min_periods=w)
+                f[f'{col}_mean{w}'] = roll.mean(); f[f'{col}_std{w}'] = roll.std(ddof=0)
+            f[f'{col}_trend7'] = (site[col]-site[col].shift(7))/7
+        stress = site['hotspot'].where(site['hotspot']>=1,0).where(site['hotspot'].notna())
+        f['stress'] = stress
+        f['stress_days28'] = stress.gt(0).astype(float).where(stress.notna()).rolling(28).sum()
+        f['stress_sum84'] = stress.rolling(84,min_periods=84).sum()/7
+        f['stress_expiring7'] = stress.shift(77).rolling(7,min_periods=7).sum()/7
+        f['stress_expiring14'] = stress.shift(70).rolling(14,min_periods=14).sum()/7
+        # Exact sliding-window accounting for unchanged future HotSpot;
+        # observed DHW anchoring tolerates official product rounding.
+        for h in HORIZONS:
+            f[f'physics_{h}'] = np.maximum(0,f['dhw']-f[f'stress_expiring{h}']+h*stress/7)
+        if feature_names is None: feature_names = [c for c in f.columns if c!='site_id']
+        complete_day = site[['sst','hotspot','dhw','ssta']].notna().all(axis=1)
+        continuous_history = complete_day.astype(int).rolling(84,min_periods=84).sum().eq(84)
+        f['feature_valid'] = np.isfinite(f[feature_names].to_numpy()).all(axis=1) & continuous_history
+        for h in HORIZONS:
+            f[f'target_{h}'] = site['dhw'].shift(-h)
+            f[f'target_date_{h}'] = f.index+pd.Timedelta(days=h)
+        f.index.name='date'; chunks.append(f.reset_index())
+    if not chunks: raise ValueError('Empty data set.')
+    return pd.concat(chunks,ignore_index=True),feature_names
+
+def split_mask(frame,name,horizon):
+    """Both issue date and label date must remain in the named partition."""
+    start,end=map(pd.Timestamp,SPLITS[name])
+    return (frame['feature_valid'] & frame['date'].between(start,end)
+        & frame[f'target_date_{horizon}'].between(start,end)
+        & frame[f'target_{horizon}'].notna())

@@ -1,0 +1,10 @@
+{
+  "checked_at_utc": "2026-10-19T07:44:18.609776+00:00",
+  "passed": true,
+  "portable_outputs_verified": [
+    "context.json",
+    "display_habitat.geojson",
+    "pixels.geojson"
+  ],
+  "raw_sources_verified": false
+}

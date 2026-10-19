@@ -1,0 +1,5 @@
+proxy_id,partition,region,horizon,first_onset,last_onset,pixel_upcrossings,participating_pixels,assessable,available_pixel_forecasts,selected_region_signal_at_first_onset,physical_region_signal_at_first_onset,any_review_flag_at_first_onset
+replay_2026-semporna-1,replay_2026,semporna_demo,7,2026-05-18,2026-05-25,4,"['semporna_offshore_1', 'semporna_offshore_2', 'semporna_offshore_3', 'semporna_south_central']",True,4,True,True,True
+replay_2026-semporna-1,replay_2026,semporna_demo,14,2026-05-18,2026-05-25,4,"['semporna_offshore_1', 'semporna_offshore_2', 'semporna_offshore_3', 'semporna_south_central']",True,4,False,False,False
+test-semporna-2,test,semporna_demo,7,2024-05-16,2024-05-31,3,"['semporna_offshore_1', 'semporna_offshore_2', 'semporna_south_central']",True,4,True,True,True
+test-semporna-2,test,semporna_demo,14,2024-05-16,2024-05-31,3,"['semporna_offshore_1', 'semporna_offshore_2', 'semporna_south_central']",True,4,False,True,True

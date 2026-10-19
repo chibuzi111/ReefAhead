@@ -1,0 +1,8 @@
+{
+  "checked_at_utc": "2026-10-16T04:21:31.151539+00:00",
+  "passed": true,
+  "rows": 34744,
+  "byte_identical": true,
+  "processed_sha256": "b795ba20b11420ed42d29c8525af1ce63c2c4cd606d3a80074030998b42c1062",
+  "method": "Re-read and validate all 24 cached annual source files, reapply documented source reconciliation, and rebuild the processed CSV in memory; no writes to daily.csv"
+}

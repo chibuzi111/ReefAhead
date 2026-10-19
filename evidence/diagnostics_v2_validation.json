@@ -1,0 +1,22 @@
+{
+  "checked_at_utc": "2026-10-18T10:39:24.952578+00:00",
+  "success": true,
+  "selected_model_and_original_interval_metrics_exactly_equal_v1": true,
+  "model_science_integrity_and_new_diagnostics_tests_passed": 26,
+  "test_command": "OMP_NUM_THREADS=4 .venv/bin/python -m pytest tests/test_science.py tests/test_model_integrity.py tests/test_diagnostics.py tests/test_v2_episode_proxy.py -q",
+  "real_prediction_contract": {
+    "site": "semporna_south_central",
+    "as_of": "2024-05-02",
+    "unchanged_forecast_before_after": true,
+    "json_allow_nan_false_passed": true,
+    "reference_end": "2019-12-31"
+  },
+  "new_files_sha256": {
+    "src/diagnostics.py": "69fdec1b0d81ab39b7c35af25f2819bd849b2aee11ea7a02d4c124197f4f1fca",
+    "scripts/evaluate_v2.py": "eaa14dacf2e3ae786728dfce683b5823ce709497016ab824b7eb4801bef93d65",
+    "tests/test_diagnostics.py": "05a83a63dd3526db4a13346f5a2659308ee8087945984293d5ed11f9df674e39",
+    "tests/test_v2_episode_proxy.py": "2c87d51c3bf4f561c71de132488fb47eadbf516a8203e4617cc025bd000ffdc4"
+  },
+  "v1_hashes_still_match": true,
+  "independent_predictive_improvement_claim": false
+}

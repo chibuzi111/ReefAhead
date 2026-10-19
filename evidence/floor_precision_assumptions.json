@@ -1,0 +1,222 @@
+{
+  "checked_at_utc": "2026-10-16T04:12:22.789001+00:00",
+  "input_scope": "2003-01-01 through 2016-12-31 training years only; no test values or performance examined.",
+  "rows": 20456,
+  "decimal_grid_check": {
+    "hotspot": {
+      "max_absolute_distance_to_nearest_0.01": 4.440892098500626e-16,
+      "non_0.01_values_at_1e_8_tolerance": 0
+    },
+    "dhw": {
+      "max_absolute_distance_to_nearest_0.01": 8.881784197001252e-16,
+      "non_0.01_values_at_1e_8_tolerance": 0
+    }
+  },
+  "metadata": {
+    "pifsc_hs_metadata.json": {
+      "sha256": "b0eaa9020f236bfb68dbd4c7e087aa178447f4576772870030b612bbb85036ef",
+      "variable_attributes": [
+        [
+          "variable",
+          "hotspot",
+          "",
+          "float",
+          "time, latitude, longitude"
+        ],
+        [
+          "attribute",
+          "hotspot",
+          "_FillValue",
+          "float",
+          "NaN"
+        ],
+        [
+          "attribute",
+          "hotspot",
+          "colorBarMaximum",
+          "double",
+          "5.0"
+        ],
+        [
+          "attribute",
+          "hotspot",
+          "colorBarMinimum",
+          "double",
+          "0.0"
+        ],
+        [
+          "attribute",
+          "hotspot",
+          "coverage_content_type",
+          "String",
+          "physicalMeasurement"
+        ],
+        [
+          "attribute",
+          "hotspot",
+          "grid_mapping",
+          "String",
+          "crs"
+        ],
+        [
+          "attribute",
+          "hotspot",
+          "ioos_category",
+          "String",
+          "Temperature"
+        ],
+        [
+          "attribute",
+          "hotspot",
+          "long_name",
+          "String",
+          "coral bleaching hotspot"
+        ],
+        [
+          "attribute",
+          "hotspot",
+          "standard_name",
+          "String",
+          "n/a"
+        ],
+        [
+          "attribute",
+          "hotspot",
+          "units",
+          "String",
+          "degree_C"
+        ],
+        [
+          "attribute",
+          "hotspot",
+          "valid_max",
+          "float",
+          "15.0"
+        ],
+        [
+          "attribute",
+          "hotspot",
+          "valid_min",
+          "float",
+          "-15.0"
+        ]
+      ],
+      "has_scale_factor": false
+    },
+    "pifsc_dhw_metadata.json": {
+      "sha256": "c8d334d0931d469e62fe12aafb28461370303bd74a951697b28c0bec38e91c35",
+      "variable_attributes": [
+        [
+          "variable",
+          "degree_heating_week",
+          "",
+          "float",
+          "time, latitude, longitude"
+        ],
+        [
+          "attribute",
+          "degree_heating_week",
+          "_FillValue",
+          "float",
+          "NaN"
+        ],
+        [
+          "attribute",
+          "degree_heating_week",
+          "colorBarMaximum",
+          "double",
+          "20.0"
+        ],
+        [
+          "attribute",
+          "degree_heating_week",
+          "colorBarMinimum",
+          "double",
+          "0.0"
+        ],
+        [
+          "attribute",
+          "degree_heating_week",
+          "coverage_content_type",
+          "String",
+          "physicalMeasurement"
+        ],
+        [
+          "attribute",
+          "degree_heating_week",
+          "grid_mapping",
+          "String",
+          "crs"
+        ],
+        [
+          "attribute",
+          "degree_heating_week",
+          "ioos_category",
+          "String",
+          "Temperature"
+        ],
+        [
+          "attribute",
+          "degree_heating_week",
+          "long_name",
+          "String",
+          "degree heating week"
+        ],
+        [
+          "attribute",
+          "degree_heating_week",
+          "standard_name",
+          "String",
+          "n/a"
+        ],
+        [
+          "attribute",
+          "degree_heating_week",
+          "units",
+          "String",
+          "degree_Celsius_weeks"
+        ],
+        [
+          "attribute",
+          "degree_heating_week",
+          "valid_max",
+          "float",
+          "100.0"
+        ],
+        [
+          "attribute",
+          "degree_heating_week",
+          "valid_min",
+          "float",
+          "0.0"
+        ]
+      ],
+      "has_scale_factor": false
+    }
+  },
+  "floor_formula": "max(0, DHW_t - outgoing_HS_sum/7 - (0.01 + h*0.005/7))",
+  "assumption": "DHW and HotSpot errors are bounded by 0.005 in their respective units, as if rounded to nearest 0.01. Public metadata do not establish the original rounding mode. Decimal grid consistency is evidence of granularity, not proof of the assumption.",
+  "derivation": "Two DHW endpoints contribute at most 0.005+0.005; each of h outgoing HotSpot contributions can be under-subtracted by at most 0.005/7. Future nonnegative stress cannot erase retained history. Threshold rounding from true HS<1 to displayed HS=1 over-subtracts outgoing stress, making this lower floor conservative.",
+  "limits": "No claim of full physical conservation or guaranteed future truth. The constraint applies to AI point forecasts, not interval endpoints; no test-based tolerance fitting.",
+  "producer_precision_evidence": {
+    "netcdf_examples": [
+      {
+        "path": "data/raw/probes/noaa_producer_20190402_extraction.json",
+        "sha256": "293adc9c5ab8450d786584eeb13370d0ce32cd049491e30cb995913057880af6",
+        "raw_file": "data/raw/probes/ct5km_hs_v3.1_20190402.nc",
+        "raw_sha256": "ccc225c34e936e34ca5ce897ae8acad47385c859e5fc6e34466b14cc16f551f7",
+        "dtype": "int16",
+        "scale_factor": "0.01"
+      },
+      {
+        "path": "data/raw/probes/noaa_producer_dhw_20190402_extraction.json",
+        "sha256": "2f34bff240f0142070ab07c3be62114f315ecbb3362cf67a9238b42b86455b7b",
+        "raw_file": "data/raw/probes/ct5km_dhw_v3.1_20190402.nc",
+        "raw_sha256": "09e29957179695006ed7b17e8ed2e3241b3a774afbe5621834d6679e5f15b700",
+        "dtype": "int16",
+        "scale_factor": "0.01"
+      }
+    ],
+    "interpretation": "Producer NetCDF examples confirm int16 packing at scale_factor 0.01 for both HotSpot and DHW. Packing granularity does not establish whether rounding was nearest, truncation or another upstream rule; the nearest-0.01 half-step assumption remains explicit."
+  }
+}

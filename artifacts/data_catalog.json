@@ -1,0 +1,137 @@
+{
+  "version": "2.0",
+  "review_date": "2026-10-18",
+  "resource_index": {
+    "url": "https://deepseek.club/topic/5152",
+    "type": "community_source_directory",
+    "fixed_benchmark": false,
+    "mandatory_test_split": null,
+    "mandatory_metric": null,
+    "note": "The post links providers. Product mapping accuracy is not forecast accuracy."
+  },
+  "table": {
+    "path": "processed/daily.csv",
+    "rows": 34744,
+    "sites": 4,
+    "start": "2003-01-01",
+    "end": "2026-10-12",
+    "sha256": "b795ba20b11420ed42d29c8525af1ce63c2c4cd606d3a80074030998b42c1062",
+    "key": [
+      "site_id",
+      "date"
+    ],
+    "fields": [
+      {
+        "name": "date",
+        "dtype": "date",
+        "description": "UTC observation date; original daily CRW time is 12:00Z",
+        "unit": "day"
+      },
+      {
+        "name": "site_id",
+        "dtype": "string",
+        "description": "Stable fixed-grid identifier; not a surveyed reef ID",
+        "unit": null
+      },
+      {
+        "name": "latitude",
+        "dtype": "float",
+        "description": "WGS84 pixel centre",
+        "unit": "degrees_north"
+      },
+      {
+        "name": "longitude",
+        "dtype": "float",
+        "description": "WGS84 pixel centre",
+        "unit": "degrees_east"
+      },
+      {
+        "name": "sst",
+        "dtype": "float",
+        "description": "CoralTemp nighttime surface-temperature estimate",
+        "unit": "degree_C"
+      },
+      {
+        "name": "hotspot",
+        "dtype": "float",
+        "description": "SST minus maximum-monthly-mean climatology; only >=1 contributes to DHW",
+        "unit": "degree_C"
+      },
+      {
+        "name": "dhw",
+        "dtype": "float",
+        "description": "Trailing 84-day accumulation of HotSpot>=1 divided by 7; not field bleaching",
+        "unit": "degree_C_weeks"
+      },
+      {
+        "name": "ssta",
+        "dtype": "float",
+        "description": "SST anomaly against the daily climatology",
+        "unit": "degree_C"
+      },
+      {
+        "name": "spatial_support",
+        "dtype": "string",
+        "description": "Fixed satellite-cell support, distinct from field geometry",
+        "unit": null
+      },
+      {
+        "name": "source",
+        "dtype": "string",
+        "description": "Upstream product identity, not the original-download URL",
+        "unit": null
+      }
+    ]
+  },
+  "datasets": [
+    {
+      "id": "noaa_crw",
+      "name": "NOAA Coral Reef Watch",
+      "state": "integrated_time_series",
+      "url": "https://coralreefwatch.noaa.gov/",
+      "structure": "time x latitude x longitude grid, extracted to fixed-pixel/day rows",
+      "native_resolution": "0.05 degree; daily",
+      "use": "forecast satellite DHW exactly at t+7/t+14; no biological bleaching labels",
+      "evaluation": "MAE/RMSE, event days, first crossing, calibration and time blocks; project-defined"
+    },
+    {
+      "id": "reef_check_malaysia",
+      "name": "Reef Check Malaysia",
+      "state": "public_reports_context_only",
+      "url": "https://reefcheck.org.my/",
+      "structure": "site/date/depth/method-dependent surveys and aggregate reports",
+      "use": "local evidence; offline field-import adapter validates separate observations",
+      "daily_training_labels_available": false,
+      "map_schema_review": {
+        "review_date": "2026-10-18",
+        "semporna_station_count": 41,
+        "stations_inside_current_pixels": 0,
+        "overlap_definition": "Published coordinates inside 0.05-degree cell bounds; location uncertainty not modelled",
+        "annual_buckets_are_not_survey_dates": true,
+        "map_reuse_license": "not_confirmed; raw map not redistributed"
+      },
+      "evaluation": "Independent field comparisons require same-site/date/depth/method observations; no expanding regional percentages to daily labels"
+    },
+    {
+      "id": "allen_coral_atlas",
+      "name": "Allen Coral Atlas",
+      "state": "downloaded_spatial_context",
+      "url": "https://allencoralatlas.org/",
+      "structure": "5m geomorphic/benthic/reef_mask raster; WFS polygons retain source attributes",
+      "use": "spatial context and cell overlap, never DHW or bleaching labels",
+      "license": "Map data CC BY 4.0; separate Planet imagery terms; local AOI only",
+      "context_available": true,
+      "context_complete": true
+    }
+  ],
+  "join_contract": {
+    "time_series": "Exact observation date + fixed centre; no interpolation",
+    "habitat": "Polygon intersection with 0.05-degree cells; equal-area CRS, not square degrees",
+    "field_observations": "Preserve method/depth/denominator/time; coordinates within selected cell; satellite association is not ecological truth"
+  },
+  "evaluation_contract": {
+    "v1_frozen": true,
+    "new_v2_analysis": "Exploratory after viewing v1 test/replay, not a new untouched holdout",
+    "future_validation": "Freeze a protocol before genuinely unseen future data and independent sites"
+  }
+}

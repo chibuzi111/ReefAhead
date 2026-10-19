@@ -1,0 +1,72 @@
+{
+  "checked_at_utc": "2026-10-16T04:18:59.093256+00:00",
+  "manifest_sha256": "8ad1708494bcc653737230c251ff162e080cd8207e3324b66e92e40eab0f201a",
+  "processed_sha256": "b795ba20b11420ed42d29c8525af1ce63c2c4cd606d3a80074030998b42c1062",
+  "source_records": 34744,
+  "processed_rows": 34744,
+  "variable_values_compared": 138976,
+  "recursive_source_hashes_verified": 241,
+  "annual_file_count": 24,
+  "years_reconstructed_from_original_child_responses": [
+    "2012",
+    "2014",
+    "2015",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025",
+    "2026"
+  ],
+  "source_request_counts_for_reconstructed_years": {
+    "pifsc": 192,
+    "pacioos": 14
+  },
+  "overlap_variable_values_independently_compared": 290,
+  "documented_mirror_corrections_reproduced": 118,
+  "all_dates_and_sites_complete": true,
+  "date_min": "2003-01-01",
+  "date_max": "2026-10-12",
+  "sites": {
+    "semporna_south_central": [
+      4.275,
+      118.625
+    ],
+    "semporna_offshore_1": [
+      4.275,
+      118.725
+    ],
+    "semporna_offshore_2": [
+      4.275,
+      118.825
+    ],
+    "semporna_offshore_3": [
+      4.275,
+      118.925
+    ]
+  },
+  "ranges": {
+    "sst": [
+      26.310000000000002,
+      30.990000000000002
+    ],
+    "hotspot": [
+      -2.9,
+      1.76
+    ],
+    "dhw": [
+      0.0,
+      8.05
+    ],
+    "ssta": [
+      -1.57,
+      2.08
+    ]
+  },
+  "duplicate_site_dates": 0,
+  "derived_values_equal_original_responses": true,
+  "scope": "Validates preserved source bytes and exact published input values. It does not independently validate satellite retrieval accuracy, reef geometry or historical publication timing."
+}

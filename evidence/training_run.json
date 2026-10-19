@@ -1,0 +1,22 @@
+{
+  "started_at_utc": "2026-10-16T04:19:58.763339+00:00",
+  "pid": 1614273,
+  "command": [
+    "./.venv/bin/python",
+    "-u",
+    "-m",
+    "src.train"
+  ],
+  "environment": {
+    "OMP_NUM_THREADS": "4",
+    "CLIMATE_DATA_DIR": "data"
+  },
+  "data_sha256": "b795ba20b11420ed42d29c8525af1ce63c2c4cd606d3a80074030998b42c1062",
+  "protocol_sha256": "efb06246324ca5ed48bddb4f7ac848dc35a970b5b3e0143da3948b19999916b0",
+  "log": "data/logs/train.log",
+  "status": "completed",
+  "model_selection": "Frozen validation-only; no prior full evaluation outputs existed.",
+  "completion_confirmed_at_utc": "2026-10-16T04:23:44.781753+00:00",
+  "completion_evidence": "Process PID no longer present; train.log terminal done=true; evaluation/model/prediction/figure/latest artifacts exist; full model audit and actual API tests passed.",
+  "runtime_seconds": 84.15
+}

@@ -1,0 +1,116 @@
+{
+  "checked_at_utc": "2026-10-19T07:46:34.585982+00:00",
+  "passed": true,
+  "environment": "Existing validated Python 3.14 server virtual environment; not a clean pip-install or Docker validation",
+  "pytest": {
+    "passed": 60,
+    "warnings": 1,
+    "warning": "Starlette testclient httpx deprecation; no runtime failure",
+    "report": "evidence/public_pytest.xml"
+  },
+  "live_uvicorn_http_checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "bytes": 10327
+    },
+    {
+      "path": "/health",
+      "status": 200,
+      "bytes": 74
+    },
+    {
+      "path": "/assets/app.js",
+      "status": 200,
+      "bytes": 16170
+    },
+    {
+      "path": "/api/evaluation",
+      "status": 200,
+      "bytes": 20318
+    },
+    {
+      "path": "/api/data-manifest",
+      "status": 200,
+      "bytes": 336887
+    },
+    {
+      "path": "/api/data-catalog",
+      "status": 200,
+      "bytes": 3918
+    },
+    {
+      "path": "/api/evaluation-v2",
+      "status": 200,
+      "bytes": 55619
+    },
+    {
+      "path": "/api/spatial-context",
+      "status": 200,
+      "bytes": 19943
+    },
+    {
+      "path": "/api/habitat",
+      "status": 200,
+      "bytes": 5200887
+    },
+    {
+      "path": "/observation-template.csv",
+      "status": 200,
+      "bytes": 146
+    }
+  ],
+  "forecast_parity_to_frozen_2024_05_15": [
+    {
+      "site_id": "semporna_offshore_1",
+      "horizon": 7,
+      "absolute_difference_to_frozen_prediction": 0.0
+    },
+    {
+      "site_id": "semporna_offshore_1",
+      "horizon": 14,
+      "absolute_difference_to_frozen_prediction": 0.0
+    },
+    {
+      "site_id": "semporna_offshore_2",
+      "horizon": 7,
+      "absolute_difference_to_frozen_prediction": 0.0
+    },
+    {
+      "site_id": "semporna_offshore_2",
+      "horizon": 14,
+      "absolute_difference_to_frozen_prediction": 4.440892098500626e-16
+    },
+    {
+      "site_id": "semporna_offshore_3",
+      "horizon": 7,
+      "absolute_difference_to_frozen_prediction": 0.0
+    },
+    {
+      "site_id": "semporna_offshore_3",
+      "horizon": 14,
+      "absolute_difference_to_frozen_prediction": 0.0
+    },
+    {
+      "site_id": "semporna_south_central",
+      "horizon": 7,
+      "absolute_difference_to_frozen_prediction": 0.0
+    },
+    {
+      "site_id": "semporna_south_central",
+      "horizon": 14,
+      "absolute_difference_to_frozen_prediction": 8.881784197001252e-16
+    }
+  ],
+  "all_sites_latest_forecast_and_csv_export": true,
+  "model_hashes_match_frozen_manifest": {
+    "7": true,
+    "14": true
+  },
+  "daily_csv_hash_match": true,
+  "atlas_portable_integrity_passed": true,
+  "raw_sources_reaudited": false,
+  "private_server_identifiers_found": [],
+  "obvious_credentials_found": [],
+  "publishing_performed": false
+}

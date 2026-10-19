@@ -1,0 +1,26 @@
+{
+  "checked_at_utc": "2026-10-16T04:28:14.859413+00:00",
+  "method": "Human-readable visual inspection through Codex view_image of exact remote PNG copies; copies were temporary and final files remain on remote server.",
+  "figures": [
+    {
+      "path": "artifacts/figures/baseline_comparison.png",
+      "sha256": "fe85ed8844f2b70bf241c35b0baf121a68dacdb08b2b3fb130eb20558aef148f",
+      "layout": "Readable, no clipped labels or legends; axes and plotted variables consistent with source evaluation."
+    },
+    {
+      "path": "artifacts/figures/observed_vs_predicted.png",
+      "sha256": "74d821ea3cd1b1d648cdcb2ff3c117a95be6170df8b4d4fd0587f4f34eaee154",
+      "layout": "Readable, no clipped labels or legends; axes and plotted variables consistent with source evaluation."
+    },
+    {
+      "path": "artifacts/figures/test_timeseries.png",
+      "sha256": "46dcc6a189475d74b37c5aab4f7eda7414be307bbd0892ab8ff6c66940a70393",
+      "layout": "Readable, no clipped labels or legends; axes and plotted variables consistent with source evaluation."
+    }
+  ],
+  "notes": [
+    "Baseline comparison visibly preserves 7-day AI underperformance versus physics.",
+    "Four 14-day trajectories show actual test observations and nominal 90% interval label; threshold at DHW=4.",
+    "Observed-versus-predicted panels include one-to-one reference and no hidden low-skill points."
+  ]
+}

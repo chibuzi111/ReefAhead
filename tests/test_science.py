@@ -1,0 +1,69 @@
+"""Scientific invariants: physics, causality, gaps and isolated target dates."""
+import unittest
+import numpy as np
+import pandas as pd
+from src.features import build_features,split_mask,retained_heat_floor
+from src.train import conformal_radius,metrics,model_prediction
+
+def synthetic(n=200,start='2021-09-01'):
+    hs=np.full(n,1.4);dhw=pd.Series(hs).rolling(84,min_periods=1).sum().to_numpy()/7
+    return pd.DataFrame({'date':pd.date_range(start,periods=n),'site_id':'test','latitude':4.275,
+        'longitude':118.625,'sst':30.5,'hotspot':hs,'dhw':dhw,'ssta':1.0})
+
+class ScientificInvariants(unittest.TestCase):
+    def test_causality_future_mutation_cannot_change_past_features(self):
+        d=synthetic();a,names=build_features(d);cutoff=d.date.iloc[140];changed=d.copy()
+        changed.loc[changed.date>cutoff,['sst','hotspot','dhw','ssta']]=99
+        b,_=build_features(changed)
+        pd.testing.assert_frame_equal(a.loc[a.date<=cutoff,names],b.loc[b.date<=cutoff,names])
+    def test_constant_hotspot_physics_matches_future(self):
+        f,_=build_features(synthetic())
+        for h in [7,14]:
+            valid=f.feature_valid & f[f'target_{h}'].notna()
+            np.testing.assert_allclose(f.loc[valid,f'physics_{h}'],f.loc[valid,f'target_{h}'],atol=1e-10)
+    def test_physics_drops_exact_oldest_days_for_variable_history(self):
+        d=synthetic();rng=np.random.default_rng(9)
+        d['hotspot']=rng.uniform(-.4,2.5,len(d))
+        stress=d.hotspot.where(d.hotspot>=1,0)
+        d['dhw']=stress.rolling(84,min_periods=1).sum()/7
+        f,_=build_features(d);i=160
+        for h in [7,14]:
+            expected=(stress.iloc[i-83+h:i+1].sum()+h*stress.iloc[i])/7
+            self.assertAlmostEqual(f.loc[i,f'physics_{h}'],expected)
+    def test_site_features_are_independent(self):
+        a=synthetic();b=a.copy();b['site_id']='second';b['sst']=20.;b['hotspot']=-2.;b['dhw']=0.
+        single,names=build_features(a);together,_=build_features(pd.concat([a,b],ignore_index=True))
+        pd.testing.assert_frame_equal(single[names],together.loc[together.site_id.eq('test'),names].reset_index(drop=True))
+    def test_subthreshold_and_negative_hotspots_accumulate_zero(self):
+        d=synthetic();d['hotspot']=np.resize(np.array([-1,.5,.999]),len(d));d['dhw']=0
+        f,_=build_features(d)
+        for h in [7,14]:self.assertEqual(float(f.loc[f.feature_valid,f'physics_{h}'].max()),0)
+    def test_threshold_includes_one_degree(self):
+        d=synthetic();d['hotspot']=1.;d['dhw']=12.;f,_=build_features(d)
+        self.assertAlmostEqual(f.loc[f.feature_valid,'stress_sum84'].iloc[-1],12.)
+    def test_missing_days_not_bridged(self):
+        f,_=build_features(synthetic().drop(index=150));gap=pd.Timestamp('2021-09-01')+pd.Timedelta(days=150)
+        self.assertFalse(bool(f.loc[f.date.eq(gap),'feature_valid'].iloc[0]))
+        self.assertTrue(pd.isna(f.loc[f.date.eq(gap+pd.Timedelta(days=7)),'sst_lag7'].iloc[0]))
+    def test_partition_excludes_labels_after_end(self):
+        f,_=build_features(synthetic(n=500,start='2020-10-01'));mask=split_mask(f,'calibration',14)
+        self.assertTrue((f.loc[mask,'target_date_14']<=pd.Timestamp('2021-12-31')).all())
+        self.assertFalse(mask[f.date.eq(pd.Timestamp('2021-12-20'))].iloc[0])
+    def test_retained_heat_floor_accounts_for_each_horizon_and_precision(self):
+        f,_=build_features(synthetic());row=f.iloc[[160]]
+        for h in [7,14]:
+            expected=max(0,float(row.dhw.iloc[0])-1.4*h/7-(0.01+h*0.005/7))
+            self.assertAlmostEqual(float(retained_heat_floor(row,h)[0]),expected)
+    def test_negative_ai_residual_cannot_erase_retained_heat(self):
+        class VeryNegativeModel:
+            def predict(self,x):return np.full(len(x),-1000.)
+        f,names=build_features(synthetic());row=f.iloc[[160]]
+        for h in [7,14]:
+            np.testing.assert_allclose(model_prediction(VeryNegativeModel(),row,names,h),retained_heat_floor(row,h))
+    def test_retained_heat_floor_stays_nonnegative_without_stress(self):
+        d=synthetic();d['hotspot']=0.;d['dhw']=0.;f,_=build_features(d);row=f.iloc[[160]]
+        for h in [7,14]:self.assertEqual(float(retained_heat_floor(row,h)[0]),0.)
+    def test_conformal_finite_sample_rank(self):self.assertEqual(conformal_radius(np.arange(1,11)),10)
+    def test_no_events_means_undefined_not_perfect(self):
+        m=metrics([0,0],[0,0]);self.assertIsNone(m['event_recall']);self.assertIsNone(m['event_precision'])
+if __name__=='__main__':unittest.main()

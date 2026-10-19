@@ -1,0 +1,179 @@
+{
+  "schema_version": "1.0",
+  "complete": true,
+  "created_at_utc": "2026-10-18T10:42:51.421425+00:00",
+  "bbox": [
+    118.6,
+    4.25,
+    118.95,
+    4.3
+  ],
+  "source": "Allen Coral Atlas",
+  "license": {
+    "id": "CC-BY-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "Allen Coral Atlas maps, bathymetry and map statistics © 2018–2023 Allen Coral Atlas Partnership and Arizona State University; CC BY 4.0. Local subset clipped and reprojected for area calculation; display geometry simplified separately.",
+    "source_url": "https://allencoralatlas.org/resources/",
+    "terms_url": "https://allencoralatlas.org/tou/",
+    "notes": "Only local habitat polygons; no Planet satellite imagery. FAQ explicitly permits WFS analysis and supplies CC BY 4.0 map attribution; global reproduction requires written consent. General site terms are retained separately; this project makes no unrestricted global redistribution claim."
+  },
+  "inputs": [
+    {
+      "url": "https://allencoralatlas.org/geoserver/ows?service=wfs&version=2.0.0&request=GetCapabilities",
+      "resolved_url": "https://allencoralatlas.org/geoserver/ows?service=wfs&version=2.0.0&request=GetCapabilities",
+      "retrieved_at_utc": "2026-10-18T10:30:12.392065+00:00",
+      "sha256": "993f038162c40993a49de1cf359f4bbaf27f618dd21c33dddd41d2a59f7efd8c",
+      "bytes": 96391,
+      "status": 200,
+      "content_type": "application/xml",
+      "path": "data/atlas_20261018/raw/capabilities.xml"
+    },
+    {
+      "url": "https://allencoralatlas.org/mapping/maps",
+      "resolved_url": "https://allencoralatlas.org/mapping/maps",
+      "retrieved_at_utc": "2026-10-18T10:30:15.322916+00:00",
+      "sha256": "8b8649f8d74e8e51f107784a377eeb88fe0c41ed7792a6305d2a2cd2926278e6",
+      "bytes": 2133,
+      "status": 200,
+      "content_type": "application/json",
+      "path": "data/atlas_20261018/raw/maps.json"
+    },
+    {
+      "url": "https://allencoralatlas.org/resources/",
+      "resolved_url": "https://allencoralatlas.org/resources/",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-18T10:37:53.344769+00:00",
+      "sha256": "feaaaaf442dfa9cdf9f81de85f28b48265f737e61cbc0e8d6a1e010bdc0fd96b",
+      "bytes": 120720,
+      "path": "data/atlas_20261018/raw/resources.html",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "url": "https://allencoralatlas.org/methods/",
+      "resolved_url": "https://allencoralatlas.org/methods/",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-18T10:37:54.543607+00:00",
+      "sha256": "b5bf32739a1e092ee135b3b65c39270806d8ea5f005755ca93eb7832e8ffb1ec",
+      "bytes": 211842,
+      "path": "data/atlas_20261018/raw/methods.html",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "url": "https://allencoralatlas.org/tou/",
+      "resolved_url": "https://allencoralatlas.org/tou/",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-18T10:37:55.327562+00:00",
+      "sha256": "a31fd499719f68649bdcd855cc2c928f9170fcb9f2046632f810313f182aaf69",
+      "bytes": 53302,
+      "path": "data/atlas_20261018/raw/terms.html",
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "url": "https://storage.googleapis.com/coral-atlas-static-files/resources-page-materials/Geoserver_Tips.pdf",
+      "resolved_url": "https://storage.googleapis.com/coral-atlas-static-files/resources-page-materials/Geoserver_Tips.pdf",
+      "status": 200,
+      "retrieved_at_utc": "2026-10-18T10:37:56.875063+00:00",
+      "sha256": "a50e5dd9fb6135eed9acfb09c6ab38d0d33f8e31d50a384e11b6da21dbcac053",
+      "bytes": 170952,
+      "path": "data/atlas_20261018/raw/geoserver_tips.pdf",
+      "content_type": "application/pdf"
+    },
+    {
+      "url": "https://allencoralatlas.org/geoserver/ows?service=wfs&version=2.0.0&request=DescribeFeatureType&typeNames=coral-atlas%3Abenthic_data_verbose",
+      "resolved_url": "https://allencoralatlas.org/geoserver/ows?service=wfs&version=2.0.0&request=DescribeFeatureType&typeNames=coral-atlas%3Abenthic_data_verbose",
+      "retrieved_at_utc": "2026-10-18T10:31:03.338443+00:00",
+      "status": 200,
+      "sha256": "0009f8515ab0846ef1474fc684c6d11861a856ec38a0817c4efd6632a2ea9355",
+      "bytes": 1164,
+      "path": "data/atlas_20261018/raw/benthic_schema.xsd"
+    },
+    {
+      "url": "https://allencoralatlas.org/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&typeNames=coral-atlas%3Abenthic_data_verbose&bbox=118.600%2C4.250%2C118.950%2C4.300%2Curn%3Aogc%3Adef%3Acrs%3AOGC%3A1.3%3ACRS84&srsName=urn%3Aogc%3Adef%3Acrs%3AOGC%3A1.3%3ACRS84&outputFormat=application%2Fjson&count=10000&sortBy=class_name%2Carea_sqkm",
+      "resolved_url": "https://allencoralatlas.org/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&typeNames=coral-atlas%3Abenthic_data_verbose&bbox=118.600%2C4.250%2C118.950%2C4.300%2Curn%3Aogc%3Adef%3Acrs%3AOGC%3A1.3%3ACRS84&srsName=urn%3Aogc%3Adef%3Acrs%3AOGC%3A1.3%3ACRS84&outputFormat=application%2Fjson&count=10000&sortBy=class_name%2Carea_sqkm",
+      "retrieved_at_utc": "2026-10-18T10:33:40.363907+00:00",
+      "status": 200,
+      "sha256": "857f6c6c130234131a0164fad39a25505dbccd4826f79ee1c05583d7e11025aa",
+      "bytes": 9583861,
+      "path": "data/atlas_20261018/raw/benthic_full.geojson",
+      "numberMatched": 7745,
+      "numberReturned": 7745,
+      "response_crs": {
+        "type": "name",
+        "properties": {
+          "name": "urn:ogc:def:crs:EPSG::4326"
+        }
+      },
+      "query_crs": "OGC:CRS84",
+      "axis_order_verified": "returned coordinates are [longitude,latitude] within the local AOI",
+      "all_matching_features_retrieved": true
+    },
+    {
+      "url": "https://allencoralatlas.org/geoserver/ows?service=wfs&version=2.0.0&request=DescribeFeatureType&typeNames=coral-atlas%3Ageomorphic_data_verbose",
+      "resolved_url": "https://allencoralatlas.org/geoserver/ows?service=wfs&version=2.0.0&request=DescribeFeatureType&typeNames=coral-atlas%3Ageomorphic_data_verbose",
+      "retrieved_at_utc": "2026-10-18T10:31:04.072438+00:00",
+      "status": 200,
+      "sha256": "b4158b6919baacc45d685a81bcce4d954bbafa7a995db32b1f1a38b62156b71a",
+      "bytes": 1173,
+      "path": "data/atlas_20261018/raw/geomorphic_schema.xsd"
+    },
+    {
+      "url": "https://allencoralatlas.org/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&typeNames=coral-atlas%3Ageomorphic_data_verbose&bbox=118.600%2C4.250%2C118.950%2C4.300%2Curn%3Aogc%3Adef%3Acrs%3AOGC%3A1.3%3ACRS84&srsName=urn%3Aogc%3Adef%3Acrs%3AOGC%3A1.3%3ACRS84&outputFormat=application%2Fjson&count=10000&sortBy=class_name%2Carea_sqkm",
+      "resolved_url": "https://allencoralatlas.org/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&typeNames=coral-atlas%3Ageomorphic_data_verbose&bbox=118.600%2C4.250%2C118.950%2C4.300%2Curn%3Aogc%3Adef%3Acrs%3AOGC%3A1.3%3ACRS84&srsName=urn%3Aogc%3Adef%3Acrs%3AOGC%3A1.3%3ACRS84&outputFormat=application%2Fjson&count=10000&sortBy=class_name%2Carea_sqkm",
+      "retrieved_at_utc": "2026-10-18T10:33:35.173666+00:00",
+      "status": 200,
+      "sha256": "d756defc5ac18ecbef10228e08b399e156c9ad6259d01a3fc6ea5aec4501d234",
+      "bytes": 8650899,
+      "path": "data/atlas_20261018/raw/geomorphic_full.geojson",
+      "numberMatched": 3363,
+      "numberReturned": 3363,
+      "response_crs": {
+        "type": "name",
+        "properties": {
+          "name": "urn:ogc:def:crs:EPSG::4326"
+        }
+      },
+      "query_crs": "OGC:CRS84",
+      "axis_order_verified": "returned coordinates are [longitude,latitude] within the local AOI",
+      "all_matching_features_retrieved": true
+    }
+  ],
+  "outputs": {
+    "context.json": {
+      "path": "context.json",
+      "bytes": 19675,
+      "sha256": "f4ac79f2ae61677d46cd5426024bddf73ca343f5b8640125882497ee6c8e572e"
+    },
+    "habitat.geojson": {
+      "path": "habitat.geojson",
+      "bytes": 19920195,
+      "sha256": "093128818975eeb7d9744eaec15064eb370e297c53019645c3c52bd95359c971"
+    },
+    "pixels.geojson": {
+      "path": "pixels.geojson",
+      "bytes": 1916,
+      "sha256": "372c062f5b4e79b69b4bdf943f6ace90c649242023f425f687eb9de1df437d56"
+    },
+    "display_habitat.geojson": {
+      "path": "display_habitat.geojson",
+      "bytes": 5200887,
+      "sha256": "824187e1445b5c1de798056759a5e5148c11e1f2fd4b5f1d0db7640bd1b1e873"
+    }
+  },
+  "code_sha256": {
+    "src/spatial.py": "bea2a201bcf84e0bb5fe5b4b278b765b6a7423f42d75810e100cc625952a0f6c",
+    "scripts/fetch_atlas_context.py": "2567d5181daa5c2022720c5545d4ed8e3b7f570e0f517500b4f6e12fc7fb9317",
+    "scripts/verify_atlas_context.py": "8c861339750d02cee60d69c284efc95f7c2c32386cc62c26919d855a33bd4d40"
+  },
+  "frozen_thermal_data_modified": false,
+  "dependencies": {
+    "python": "3.14.7",
+    "shapely": "2.2.0",
+    "pyproj": "3.8.0"
+  },
+  "audit_reports": {
+    "raw_audit.json": {
+      "sha256": "5e042caa0ed6b901e51417c90f47a720cc39e142a0bb425cfcfd1d466d065dcf",
+      "passed": true
+    }
+  }
+}

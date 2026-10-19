@@ -1,0 +1,7 @@
+site_id,target_date,issue_date,horizon,observed,prediction,alert_at_exact_lead
+semporna_offshore_1,2024-05-22,2024-05-15,7,4.17,3.9800000000000004,False
+semporna_offshore_2,2024-05-31,2024-05-24,7,4.14,4.21,True
+semporna_south_central,2024-05-16,2024-05-09,7,4.01,4.22,True
+semporna_offshore_1,2024-05-22,2024-05-08,14,4.17,3.377686271393365,False
+semporna_offshore_2,2024-05-31,2024-05-17,14,4.14,2.514012518675397,False
+semporna_south_central,2024-05-16,2024-05-02,14,4.01,3.618975800330663,False

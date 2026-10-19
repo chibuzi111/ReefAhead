@@ -1,0 +1,81 @@
+"""Read-only fixed-model inference; no refit or calibration from requested dates."""
+from datetime import datetime
+from functools import lru_cache
+from pathlib import Path
+from zoneinfo import ZoneInfo
+import hashlib
+import json
+import joblib
+import numpy as np
+import pandas as pd
+from src.features import DEFAULT_DATA,HORIZONS,load_data,build_features,retained_heat_floor
+ROOT=Path(__file__).resolve().parents[1]
+ARTIFACTS=ROOT/'artifacts'
+
+@lru_cache(maxsize=4)
+def _bundle(h):
+    # Verify the release manifest before deserializing trusted local artifacts.
+    # This detects corruption; an unsigned local manifest is not an authenticity proof.
+    model_path = ARTIFACTS/f'model_{h}d.joblib'
+    try:
+        manifest = json.loads((ARTIFACTS/'evaluation.json').read_text())
+        expected = manifest['model_artifacts'][str(h)]['sha256']
+    except (FileNotFoundError, KeyError, TypeError, json.JSONDecodeError) as exc:
+        raise ValueError('Model integrity manifest is unavailable or invalid.') from exc
+    actual = hashlib.sha256(model_path.read_bytes()).hexdigest()
+    if not isinstance(expected, str) or actual != expected:
+        raise ValueError('Model artifact checksum mismatch; inference is disabled.')
+    # Only trusted locally produced model artifacts; never user-uploaded joblib.
+    return joblib.load(model_path)
+
+def predict_forecast(site_id,as_of=None,data_path=DEFAULT_DATA):
+    raw=load_data(data_path); site=raw.loc[raw.site_id.eq(site_id)].copy()
+    if not len(site): raise ValueError(f'Unknown site_id: {site_id}')
+    latest_available=site.date.max()
+    if as_of is not None:
+        cutoff=pd.Timestamp(as_of)
+        if cutoff.tzinfo is not None: cutoff=cutoff.tz_convert('UTC').tz_localize(None)
+        cutoff=cutoff.normalize()
+        if cutoff>latest_available: raise ValueError('Requested observation date is later than available data.')
+        site=site.loc[site.date.le(cutoff)]
+        if len(site)==0 or site.date.max()!=cutoff: raise ValueError('Requested issue date has no satellite observation.')
+    issue=site.date.max()
+    if issue<pd.Timestamp('2022-01-01'):
+        raise ValueError('Fixed-model inference starts in 2022; earlier dates leak future training/calibration.')
+    frame,_=build_features(site); row=frame.iloc[[-1]]
+    if not bool(row.feature_valid.iloc[0]):
+        raise ValueError('Forecast unavailable: 84 uninterrupted valid input days are required.')
+    forecasts=[]
+    for h in HORIZONS:
+        b=_bundle(h); physics=float(row[f'physics_{h}'].iloc[0])
+        ai=max(float(retained_heat_floor(row,h)[0]),physics+float(b['model'].predict(row[b['feature_names']])[0]))
+        climate=float(b['climatology'][site_id][(issue+pd.Timedelta(days=h)).dayofyear-1])
+        p={'dhw_persistence':float(row.dhw.iloc[0]),'physical_persistence':physics,
+           'seasonal_climatology':climate}.get(b['selected_name'],ai)
+        cal=b['calibration'][site_id]; radius=cal['radius90']
+        forecasts.append({'horizon':h,'target_date':(issue+pd.Timedelta(days=h)).strftime('%Y-%m-%d'),
+            'mean':p,'lower':max(0,p-radius),'upper':p+radius,'interval_nominal_coverage':.9,
+            'baseline':physics,'persistence':float(row.dhw.iloc[0]),'climatology':climate,
+            'ai_prediction':ai,'retained_heat_floor':float(retained_heat_floor(row,h)[0]),'model_name':b['selected_name'],'ai_model_name':b['ai_name'],
+            'probability_dhw_ge4':float(np.mean(np.asarray(cal['signed_errors'])+p>=4)),
+            'probability_definition':'held-out residual frequency for satellite DHW>=4, not bleaching probability'})
+    now=pd.Timestamp(datetime.now(ZoneInfo('Asia/Shanghai')).date()); age=int((now-issue).days)
+    history=site.tail(180)[['date','dhw','sst','hotspot','ssta']].copy()
+    history['date']=history['date'].dt.strftime('%Y-%m-%d')
+    def clean(r): return {k:(None if isinstance(v,float) and not np.isfinite(v) else v) for k,v in r.items()}
+    return {'site_id':site_id,'date':issue.strftime('%Y-%m-%d'),'issue_date':issue.strftime('%Y-%m-%d'),
+        'latest_available_date':latest_available.strftime('%Y-%m-%d'),
+        'latitude':float(row.latitude.iloc[0]),'longitude':float(row.longitude.iloc[0]),
+        'input_age_days':age,'stale_input':age>2,
+        'current':{c:float(row[c].iloc[0]) for c in ['sst','hotspot','dhw','ssta']},
+        'forecasts':forecasts,'history':[clean(r) for r in history.to_dict('records')],
+        'model_version':'reefahead-1.0.0','mode':'retrospective fixed-model research demonstration',
+        'scope':'NOAA CRW fixed 0.05-degree water pixel; not a verified reef polygon or bleaching diagnosis.',
+        'units':{'sst':'degree C','hotspot':'degree C','ssta':'degree C','dhw':'degree C-weeks'},
+        'training_last_label':'2019-12-31','calibration_last_label':'2021-12-31',
+        'availability_note':'Issue date is observation date; publication-time availability is not verified.'}
+
+if __name__=='__main__':
+    import argparse,json
+    p=argparse.ArgumentParser();p.add_argument('--site',default='semporna_south_central');p.add_argument('--as-of')
+    a=p.parse_args();print(json.dumps(predict_forecast(a.site,a.as_of),ensure_ascii=False,indent=2))

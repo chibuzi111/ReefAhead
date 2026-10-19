@@ -1,0 +1,96 @@
+{
+  "checked_at_utc": "2026-10-16T04:23:07.632728+00:00",
+  "data_sha256": "b795ba20b11420ed42d29c8525af1ce63c2c4cd606d3a80074030998b42c1062",
+  "evaluation_sha256": "15888298d8c48a67e70662292c0b2cc7789612df0e085252e9937c9887cb5ec8",
+  "all_predictions_sha256": "71d0167811cbdac328740c3555306bc2103a295bd61a162345133da1b5fa39b0",
+  "metric_values_recomputed": 6362,
+  "maximum_metric_difference": 0.0,
+  "prediction_and_validation_rows_physically_recomputed": 28240,
+  "observed_labels_match_input": true,
+  "split_counts_independently_derived": true,
+  "calibration_radius_bounds_and_residual_frequencies_recomputed": true,
+  "selected_model_is_validation_winner": true,
+  "source_and_model_hashes_valid": true,
+  "all_site_and_year_metrics_recomputed": true,
+  "first_crossing_records_recomputed": true,
+  "bootstrap_resampled_independently": true,
+  "horizons": {
+    "7": {
+      "selected_model": "physical_persistence",
+      "test": {
+        "n": 5816,
+        "mae": 0.0665597366869719,
+        "rmse": 0.2137532669071846,
+        "bias": 5.2564354490077314e-05,
+        "event_days_ge4": 216,
+        "event_prevalence": 0.037138927097661624,
+        "event_precision": 0.9375,
+        "event_recall": 0.9722222222222222,
+        "event_f1": 0.9545454545454546,
+        "true_positive": 210,
+        "false_positive": 14,
+        "false_negative": 6,
+        "true_negative": 5586,
+        "heat_stress_mae": 0.16294973544973548,
+        "interval_coverage": 0.8889270976616231,
+        "mean_interval_width": 0.2426660444095108,
+        "brier_score_ge4": 0.003173140731273434
+      },
+      "gain_vs_physical": {
+        "mae_gain": 0.0,
+        "ci95_lower": 0.0,
+        "ci95_upper": 0.0,
+        "blocks": 17
+      },
+      "claim_support": {
+        "lower_mae_than_physical_baseline": false,
+        "descriptive_gain_interval_entirely_positive": false,
+        "empirical_coverage_at_least_nominal_90_percent": false
+      },
+      "onsets": {
+        "n": 3,
+        "exact_lead_hits": 2,
+        "note": "Nearby site episodes remain correlated; no field bleaching labels."
+      }
+    },
+    "14": {
+      "selected_model": "random_forest_residual",
+      "test": {
+        "n": 5788,
+        "mae": 0.14216794582071096,
+        "rmse": 0.3259118451239077,
+        "bias": -0.021273808629506168,
+        "event_days_ge4": 216,
+        "event_prevalence": 0.03731859018659295,
+        "event_precision": 0.9842105263157894,
+        "event_recall": 0.8657407407407407,
+        "event_f1": 0.9211822660098522,
+        "true_positive": 187,
+        "false_positive": 3,
+        "false_negative": 29,
+        "true_negative": 5569,
+        "heat_stress_mae": 0.4873455491749915,
+        "interval_coverage": 0.8902902557014513,
+        "mean_interval_width": 0.5885014185227041,
+        "brier_score_ge4": 0.00474936217545352
+      },
+      "gain_vs_physical": {
+        "mae_gain": 0.019788318371213205,
+        "ci95_lower": -0.003064362827677865,
+        "ci95_upper": 0.04283270400974344,
+        "blocks": 17
+      },
+      "claim_support": {
+        "lower_mae_than_physical_baseline": true,
+        "descriptive_gain_interval_entirely_positive": false,
+        "empirical_coverage_at_least_nominal_90_percent": false
+      },
+      "onsets": {
+        "n": 3,
+        "exact_lead_hits": 0,
+        "note": "Nearby site episodes remain correlated; no field bleaching labels."
+      }
+    }
+  },
+  "scope": "Independent arithmetic and provenance audit, without importing src metrics or fitting/tuning. Does not establish ecological benefit, prospective availability or independent spatial generalization."
+}
